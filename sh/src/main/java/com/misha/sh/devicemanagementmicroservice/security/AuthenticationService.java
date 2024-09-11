@@ -3,8 +3,8 @@ package com.misha.sh.devicemanagementmicroservice.security;
 
 
 import com.misha.sh.devicemanagementmicroservice.exception.EmailorPasswordAlreadyExistException;
-import com.misha.sh.devicemanagementmicroservice.model.user.User;
-import com.misha.sh.devicemanagementmicroservice.model.user.UserRoles;
+import com.misha.sh.devicemanagementmicroservice.model.User;
+import com.misha.sh.devicemanagementmicroservice.model.UserRoles;
 import com.misha.sh.devicemanagementmicroservice.request.registrationRequests.RegistrationBusinessAccountRequest;
 import com.misha.sh.devicemanagementmicroservice.request.registrationRequests.RegistrationRequest;
 import com.misha.sh.devicemanagementmicroservice.repository.RoleRepository;
@@ -76,7 +76,8 @@ public class AuthenticationService {
                 .enabled(false)
                 .roles(Collections.singletonList(userRole))
                 .build();
-
+            user.setCreatedDate(LocalDateTime.now());
+            user.setLastModifiedDate(LocalDateTime.now());
             userRepository.save(user);
             sendValidationEmail(user);
 
