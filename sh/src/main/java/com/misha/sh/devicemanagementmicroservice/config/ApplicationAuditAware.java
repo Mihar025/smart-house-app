@@ -1,6 +1,6 @@
 package com.misha.sh.devicemanagementmicroservice.config;
 
-import com.misha.sh.devicemanagementmicroservice.model.user.User;
+import com.misha.sh.devicemanagementmicroservice.model.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
