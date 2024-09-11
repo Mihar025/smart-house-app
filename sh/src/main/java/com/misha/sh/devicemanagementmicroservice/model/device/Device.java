@@ -1,6 +1,6 @@
 package com.misha.sh.devicemanagementmicroservice.model.device;
 
-import com.misha.sh.devicemanagementmicroservice.model.user.User;
+import com.misha.sh.devicemanagementmicroservice.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "devices")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Device {
     //For registration device
     @Id
@@ -50,13 +51,15 @@ public abstract class Device {
 
 
 
+    private boolean isConnected;
     private boolean turnOn;
     private boolean turnOff;
+
+
 
     @Enumerated(EnumType.STRING)
     private DeviceStatus status;
     private String location;
-    private boolean isConnected;
     private Double batteryLevel;
     private Double voltage;
     private Integer amps;
