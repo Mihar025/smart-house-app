@@ -32,24 +32,16 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class DeviceService {
+public class DevicService {
     private static final double LOW_BATTERY_THRESHOLD = 20.0;
     private static final double CRITICAL_BATTERY_THRESHOLD = 10.0;
-    private static final Logger log = LoggerFactory.getLogger(DeviceService.class);
+    private static final Logger log = LoggerFactory.getLogger(DevicService.class);
     private final DeviceRepository deviceRepository;
     private final DeviceMapper deviceMapper;
     private final ModeService modeService;
     private final ModeMapper modeMapper;
 
-/*
-    @Transactional(rollbackOn = Exception.class)
-    public DeviceResponse addDevice(DeviceRequest deviceRequest) throws BusinessException {
-        var newDevice = deviceMapper.toDevice(deviceRequest);
-        log.info("New device with id: {}", newDevice.getId());
-        deviceRepository.save(newDevice);
-        return deviceMapper.toDeviceResponse(newDevice);
-    }
- */
+
 
     public void editDevice (DeviceRequest deviceRequest) {
         var device = deviceRepository.findById(deviceRequest.getId())
