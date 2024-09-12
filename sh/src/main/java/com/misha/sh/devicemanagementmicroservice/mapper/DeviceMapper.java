@@ -22,7 +22,7 @@ public class DeviceMapper {
                 .manufacturer(device.getManufacturer())
                 .deviceModel(device.getDeviceModel())
                 .serialNumber(device.getSerialNumber())
-                .createdAt(device.getCreatedAt())
+                .createdAt(device.getCreatedDate())
                 .updatedAt(device.getUpdatedAt())
                 .isActive(device.isActive())
                 .batteryLevel(device.getBatteryLevel())
