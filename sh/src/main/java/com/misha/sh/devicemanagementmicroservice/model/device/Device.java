@@ -33,9 +33,9 @@ public abstract class Device {
     private String manufacturer;
     private String deviceModel;
     private String serialNumber;
+
     @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdDate;
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt;
