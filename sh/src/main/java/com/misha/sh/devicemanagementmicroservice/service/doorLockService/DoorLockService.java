@@ -6,7 +6,8 @@ import com.misha.sh.devicemanagementmicroservice.model.device.DeviceStatus;
 import com.misha.sh.devicemanagementmicroservice.model.device.DeviceType;
 import com.misha.sh.devicemanagementmicroservice.model.doorLock.DoorLock;
 import com.misha.sh.devicemanagementmicroservice.model.doorLock.LockMechanism;
-import com.misha.sh.devicemanagementmicroservice.model.user.User;
+import com.misha.sh.devicemanagementmicroservice.model.doorLock.LockStatus;
+import com.misha.sh.devicemanagementmicroservice.model.User;
 import com.misha.sh.devicemanagementmicroservice.repository.DoorLockRepository;
 import com.misha.sh.devicemanagementmicroservice.repository.UserRepository;
 import com.misha.sh.devicemanagementmicroservice.request.doorLock.DoorLockAccessCodeRequest;
@@ -17,7 +18,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -79,8 +79,9 @@ public class DoorLockService {
 
                     doorLock.setLastOpenedAt(LocalDateTime.now());
                     doorLock.setOpened(true);
+                    doorLock.setLockStatus(LockStatus.UNLOCKED);
                     doorLockRepository.save(doorLock);
-                    lockSchedulerService.scheduleLock(doorLockId, AUTO_LOCK_DELAY_MINUTES);
+                    lockSchedulerService.scheduleLock(doorLockId,AUTO_LOCK_DELAY_MINUTES);
 
                     return doorLockMapper.toDoorLockStatus(doorLock);
             }
@@ -97,15 +98,10 @@ public class DoorLockService {
                         doorLock.setLastClosedAt(LocalDateTime.now());
                         doorLock.setOpened(false);
                         doorLock.setLocked(true);
+                        doorLock.setLockStatus(LockStatus.LOCKED);
                         doorLockRepository.save(doorLock);
                     return doorLockMapper.toDoorLockStatus(doorLock);
                 }
-
-
-
-
-
-
 
     private void addLock(DoorLockRequest doorLockRequest, DoorLock doorLock) {
         doorLock.setDeviceName(doorLockRequest.getDeviceName());
@@ -116,7 +112,7 @@ public class DoorLockService {
         doorLock.setSerialNumber(doorLockRequest.getSerialNumber());
         doorLock.setStatus(DeviceStatus.ACTIVE);
         doorLock.setAccessCode(doorLockRequest.getAccessCode());
-        doorLock.setLockMechanism(LockMechanism.PIN_CODE);
+        doorLock.setLockMechanism(LockMechanism.PIN_COD);
         doorLock.setRemoteAccessEnabled(true);
     }
 
@@ -131,7 +127,5 @@ public class DoorLockService {
         return doorLockRepository.findById(doorLockId)
                 .orElseThrow(() -> new EntityNotFoundException("DoorLock with this id does not exist"));
     }
-
-
 
 }
