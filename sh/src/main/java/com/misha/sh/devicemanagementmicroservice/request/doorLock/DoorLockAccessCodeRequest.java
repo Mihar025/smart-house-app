@@ -1,15 +1,14 @@
 package com.misha.sh.devicemanagementmicroservice.request.doorLock;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Builder
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class DoorLockAccessCodeRequest {
 
-    private Integer accessCode;
+    private String accessCode;
 
 
 }
