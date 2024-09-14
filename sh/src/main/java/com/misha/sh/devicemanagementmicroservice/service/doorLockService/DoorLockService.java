@@ -8,20 +8,30 @@ import com.misha.sh.devicemanagementmicroservice.model.doorLock.DoorLock;
 import com.misha.sh.devicemanagementmicroservice.model.doorLock.LockMechanism;
 import com.misha.sh.devicemanagementmicroservice.model.doorLock.LockStatus;
 import com.misha.sh.devicemanagementmicroservice.model.User;
+import com.misha.sh.devicemanagementmicroservice.model.smartOutlet.SmartOutlet;
+import com.misha.sh.devicemanagementmicroservice.pagination.PageResponse;
 import com.misha.sh.devicemanagementmicroservice.repository.DoorLockRepository;
 import com.misha.sh.devicemanagementmicroservice.repository.UserRepository;
 import com.misha.sh.devicemanagementmicroservice.request.doorLock.DoorLockAccessCodeRequest;
 import com.misha.sh.devicemanagementmicroservice.request.doorLock.DoorLockRequest;
 import com.misha.sh.devicemanagementmicroservice.request.doorLock.DoorLockResponse;
 import com.misha.sh.devicemanagementmicroservice.request.doorLock.DoorLockStatus;
+import com.misha.sh.devicemanagementmicroservice.request.smartOutlet.SmartOutletResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -47,6 +57,7 @@ public class DoorLockService {
             User user = authenticateUser(authentication);
             DoorLock doorLock = new DoorLock();
                 doorLock.setUser(user);
+                doorLock.setLockStatus(LockStatus.LOCKED);
                     addLock(doorLockRequest, doorLock);
                     if(doorLockRepository.existsBySerialNumber(doorLock.getSerialNumber())){
                         throw new BusinessException("DoorLock with this serial number already exists");
@@ -54,6 +65,54 @@ public class DoorLockService {
                         doorLockRepository.save(doorLock);
                             return doorLockMapper.toDoorLockResponse(doorLock);
     }
+
+    public PageResponse<DoorLockResponse> findAllDoorLocks(
+            Authentication authentication,
+            int size,
+            int page) {
+        User user = ((User) authentication.getPrincipal());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
+        Page<DoorLock> doorLocks = doorLockRepository.findAll(pageable);
+        List<DoorLockResponse> doorLockResponses = doorLocks.getContent().stream()
+                .map(doorLock -> {
+                    if(user.getId().equals(doorLock.getUser().getId())) {
+                        return doorLockMapper.toDoorLockResponse(doorLock);
+                    }
+                    else{
+                        throw new AccessDeniedException("You do not have permission to access this resource");
+                    }
+                })
+                .collect(Collectors.toList());
+
+        return new PageResponse<>(
+                doorLockResponses,
+                doorLocks.getNumber(),
+                doorLocks.getSize(),
+                doorLocks.getTotalElements(),
+                doorLocks.getTotalPages(),
+                doorLocks.isFirst(),
+                doorLocks.isLast()
+        );
+    }
+
+
+
+
+
+
+
+
+
+
+        public DoorLockResponse findLockById(Integer lockId, Authentication authentication) {
+        User user = ((User) authentication.getPrincipal());
+        var smartLock = doorLockRepository.findById(lockId).orElseThrow(EntityNotFoundException::new);
+        if(!user.getId().equals(smartLock.getUser().getId())) {
+            throw new BusinessException("User with this id does not match");
+        }
+        return doorLockMapper.toDoorLockResponse(smartLock);
+        }
+
 
         public void changeAccessCode(Authentication authentication, Integer accessCode, Integer doorLockId) {
             authenticateUser(authentication);
@@ -66,13 +125,21 @@ public class DoorLockService {
                     doorLockRepository.save(doorLock);
         }
 
-            public DoorLockStatus openDoorLock(Authentication authentication, Integer doorLockId, DoorLockAccessCodeRequest accessCodeRequest) {
+            public DoorLockStatus openDoorLock(Authentication authentication, Integer doorLockId, Integer accessCode) {
                   User user =  authenticateUser(authentication);
                   log.info("User was successfully authenticated");
                   DoorLock doorLock = getDoorLock(doorLockId);
                   log.info("Door lock was successfully founded!");
 
-                if(!accessCodeRequest.getAccessCode().equals(doorLock.getAccessCode())){
+                  var lock = doorLockRepository.findById(doorLockId)
+                          .orElseThrow(EntityNotFoundException::new);
+
+                    if(!user.getId().equals(lock.getUser().getId())) {
+                        log.warn("User with this id does not match");
+                        throw new BusinessException("User with this id does not match");
+                    }
+
+                  if(!accessCode.equals(doorLock.getAccessCode())){
                     log.warn("Invalid access code attempt for door lock {}", doorLockId);
                     throw new BusinessException("DoorLock with this access code does not exist");
                 }
@@ -86,12 +153,16 @@ public class DoorLockService {
                     return doorLockMapper.toDoorLockStatus(doorLock);
             }
 
-                public DoorLockStatus closeDoorLock(Authentication authentication, Integer doorLockId, DoorLockAccessCodeRequest accessCodeRequest) {
+                public DoorLockStatus closeDoorLock(Authentication authentication, Integer doorLockId, Integer accessCode) {
                         User user =  authenticateUser(authentication);
-                        log.info("User was successfully  authenticated");
                         DoorLock doorLock = getDoorLock(doorLockId);
-                         log.info("Door  lock was successfully founded!");
-                    if(!accessCodeRequest.getAccessCode().equals(doorLock.getAccessCode())){
+                        if(!user.getId().equals(doorLock.getUser().getId())) {
+                            log.warn("User with this id does not match");
+                            throw new BusinessException("User with this id does not match");
+                        }
+                        log.info("User was successfully  authenticated");
+
+                    if(!accessCode.equals(doorLock.getAccessCode())){
                         log.warn("Invalid  access code attempt for door lock {}", doorLockId);
                         throw new BusinessException("DoorLock with this access code does not exist");
                     }
