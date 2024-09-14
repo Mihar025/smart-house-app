@@ -11,6 +11,6 @@ import lombok.*;
 public class ColorTemperatureRequest {
 
     private ColorTemperature colorTemperature;
-    private Integer ownerId;
+
 
 }
