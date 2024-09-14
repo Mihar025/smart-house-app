@@ -10,8 +10,7 @@ import lombok.*;
 @Builder
 public class BrightnessRequest {
 
-
     private Integer brightness;
     private ColorTemperature colorTemperature;
-    private Integer ownerId;
+
 }
