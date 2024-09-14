@@ -13,6 +13,7 @@ public class DoorLockMapper {
                 .deviceId(doorLock.getId())
                 .deviceName(doorLock.getDeviceName())
                 .deviceType(doorLock.getDeviceType())
+                .deviceDescription(doorLock.getDeviceDescription())
                 .manufacturer(doorLock.getManufacturer())
                 .deviceModel(doorLock.getDeviceModel())
                 .serialNumber(doorLock.getSerialNumber())
