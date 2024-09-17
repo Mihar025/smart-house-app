@@ -53,7 +53,7 @@ public class ThermostatController {
             Authentication authentication,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        PageResponse<ThermostatResponse> response = thermostatService.findAllUserThermostats(authentication, size, page);
+        PageResponse<ThermostatResponse> response = thermostatService.findAllUserThermostats(page, size, authentication);
         return ResponseEntity.ok(response);
     }
 
