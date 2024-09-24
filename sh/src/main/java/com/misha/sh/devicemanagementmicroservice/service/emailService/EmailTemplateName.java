@@ -1,4 +1,4 @@
-package com.misha.sh.devicemanagementmicroservice.service;
+package com.misha.sh.devicemanagementmicroservice.service.emailService;
 
 import lombok.Getter;
 
