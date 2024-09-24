@@ -1,4 +1,4 @@
-package com.misha.sh.devicemanagementmicroservice.service;
+package com.misha.sh.devicemanagementmicroservice.service.deviceService;
 
 
 
@@ -16,6 +16,7 @@ import com.misha.sh.devicemanagementmicroservice.request.device.condition.Device
 import com.misha.sh.devicemanagementmicroservice.request.device.devReq.DeviceRequest;
 import com.misha.sh.devicemanagementmicroservice.request.device.devReq.DeviceResponse;
 import com.misha.sh.devicemanagementmicroservice.request.device.devTechReq.DeviceTechnicalResponse;
+import com.misha.sh.devicemanagementmicroservice.service.modeService.ModeService;
 import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
