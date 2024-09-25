@@ -47,10 +47,6 @@ public class DoorLockService {
     private final UserRepository userRepository;
     private final LockSchedulerService lockSchedulerService;
 
-    //1) todo findAllLocks
-    //2) TODO find lock by id
-    //3) todo add lock to user and auto add PinCode and set LockStatus
-    //4)
 
     @Transactional(rollbackOn = Exception.class)
     public DoorLockResponse addDoorLock(DoorLockRequest doorLockRequest, Authentication authentication) {
@@ -94,13 +90,6 @@ public class DoorLockService {
                 doorLocks.isLast()
         );
     }
-
-
-
-
-
-
-
 
 
 
