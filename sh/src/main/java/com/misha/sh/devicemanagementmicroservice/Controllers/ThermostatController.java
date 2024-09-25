@@ -95,11 +95,17 @@ public class ThermostatController {
      * @return ResponseEntity with no content and HTTP status 200 (OK)
      */
     @PostMapping("/{thermostatId}/turn-off")
-
     public ResponseEntity<Void> turnOffThermostat(
             @PathVariable Integer thermostatId,
             Authentication authentication) {
         thermostatService.turnOffThermostat(thermostatId, authentication);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{thermostatId}/turn-on")
+    public ResponseEntity<Void> turnOnThermostat(@PathVariable("thermostatId") Integer thermostatId,
+                                                 Authentication authentication) {
+        thermostatService.turnOnThermostat(thermostatId,authentication);
         return ResponseEntity.ok().build();
     }
 
