@@ -13,10 +13,5 @@ public class SmokeSensorResponse {
     private String manufacturer;
     private String deviceModel;
     private String serialNumber;
-    private String location;
-    private Double pm25AlertThreshold;
-    private Integer co2AlertThreshold;
-    private Double accuracy;
-    private Integer updateFrequency;
 
 }
