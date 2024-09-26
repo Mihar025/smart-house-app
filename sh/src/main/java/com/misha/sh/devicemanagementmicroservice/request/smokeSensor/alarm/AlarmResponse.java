@@ -13,4 +13,5 @@ public class AlarmResponse {
     private Double SmokeValue;
     private Double alarmThreshold;
     private LocalDateTime lastAlarmTime;
+    private Boolean alarmActive;
 }
