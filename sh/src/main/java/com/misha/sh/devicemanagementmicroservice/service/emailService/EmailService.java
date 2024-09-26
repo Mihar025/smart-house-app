@@ -63,4 +63,42 @@ public class EmailService {
 
         mailSender.send(mimeMessage);
     }
+
+
+
+
+    @Async
+    public void sendAlarmEmail(
+            String to,
+            String username,
+            EmailAlarmTemplate emailTemplate,
+            String subject
+    ) throws MessagingException {
+        String templateName;
+        if (emailTemplate == null) {
+            templateName = "activate-alarm";
+        } else {
+            templateName = emailTemplate.name();
+        }
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(
+                mimeMessage,
+                MULTIPART_MODE_MIXED,
+                UTF_8.name()
+        );
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("username", username);
+        properties.put("subject", subject);
+        Context context = new Context();
+        context.setVariables(properties);
+
+        helper.setFrom("contact@misha.com");
+        helper.setTo(to);
+        helper.setSubject(subject);
+
+        String template = templateEngine.process(templateName, context);
+
+        helper.setText(template, true);
+        mailSender.send(mimeMessage);
+    }
 }
