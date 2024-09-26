@@ -7,9 +7,9 @@ public enum EmailTemplateName {
 
     ACTIVATE_ACCOUNT("activate_account")
 ;
-    private final String namel;
+    private final String name;
 
-    EmailTemplateName(String namel) {
-        this.namel = namel;
+    EmailTemplateName(String name) {
+        this.name = name;
     }
 }
