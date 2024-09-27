@@ -37,6 +37,9 @@ public class SmokeSensor extends Device {
     private SensorSensitivity sensitivity; // Уровень чувствительности сенсора
 
     @Column(nullable = false)
+    private Double valueForSensitivity;
+
+    @Column(nullable = false)
     private Boolean selfTestPassed; // Результат последнего самотестирования
 
     @Column(nullable = false)
