@@ -3,6 +3,9 @@ package com.misha.sh.devicemanagementmicroservice.mapper;
 import com.misha.sh.devicemanagementmicroservice.model.smokeSensor.SmokeSensor;
 import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.SmokeSensorRequest;
 import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.SmokeSensorResponse;
+import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alaramMaintenence.AlarmMaintenanceDateResponse;
+import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alarm.AlarmResponse;
+import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alarmSensitivity.AlarmSensitivityResponse;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +28,34 @@ public class SmokeSensorMapper {
                 .manufacturer(smokeSensor.getManufacturer())
                 .deviceModel(smokeSensor.getDeviceModel())
                 .serialNumber(smokeSensor.getSerialNumber())
+                .build();
+    }
+
+
+    public AlarmResponse toAlarmResponse(SmokeSensor savedSmokesensor) {
+        return AlarmResponse.builder()
+                .alarmId(savedSmokesensor.getId())
+                .alarmName(savedSmokesensor.getDeviceName())
+                .SmokeValue(savedSmokesensor.getSmokeLevel())
+                .alarmThreshold(savedSmokesensor.getSmokeThreshold())
+                .lastAlarmTime(savedSmokesensor.getLastAlarmTime())
+                .alarmActive(savedSmokesensor.getAlarmActive())
+                .build();
+    }
+
+        public AlarmSensitivityResponse toAlarmSensitivityResponse(SmokeSensor newSmokeSensor) {
+            return AlarmSensitivityResponse.builder()
+                    .smokeSensorId(newSmokeSensor.getId())
+                    .valueForSensitivity(newSmokeSensor.getSmokeLevel())
+                    .sensitivity(newSmokeSensor.getSensitivity())
+                    .build();
+        }
+
+
+    public AlarmMaintenanceDateResponse toAlarmMaintenanceDateResponse(SmokeSensor smokeSensor) {
+        return AlarmMaintenanceDateResponse.builder()
+                .smokeSensorId(smokeSensor.getId())
+                .lastMaintenanceDate(smokeSensor.getLastMaintenanceDate())
                 .build();
     }
 }
