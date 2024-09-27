@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -173,13 +174,30 @@ public class ThermostatService {
         }
         turnOff(thermostat);
         thermostatRepository.save(thermostat);
-
         }
 
+    public void turnOnThermostat(Integer thermostatId, Authentication authentication) {
+        User user = ((User) authentication.getPrincipal());
+        var thermostat = thermostatRepository.findById(thermostatId)
+                .orElseThrow(() -> new EntityNotFoundException("Thermostat not found with id " + thermostatId));
 
+        if (!user.getId().equals(thermostat.getUser().getId())) {
+            throw new AccessDeniedException("User is not authorized to access this thermostat");
+        }
 
+        if (thermostat.isTurnOn()) {
+            log.warn("Thermostat {} is already turned on", thermostatId);
+            throw new BusinessException("Thermostat is already turned on");
+        }
 
-
+        if (thermostat.isTurnOff()) {
+            turnOn(thermostat);
+            thermostatRepository.save(thermostat);
+        } else {
+            log.warn("Thermostat {} is in an unexpected state", thermostatId);
+            throw new BusinessException("Thermostat is in an unexpected state");
+        }
+    }
 
     /**
      * Sets a thermostat to cooling mode.
@@ -333,9 +351,22 @@ public class ThermostatService {
         thermostat.setIsHeating(Boolean.FALSE);
         thermostat.setTargetTemperature(0.0);
         thermostat.setCurrentTemperature(0.0);
-
-
     }
+
+    private void turnOn(Thermostat thermostat) {
+        thermostat.setActive(true);
+        thermostat.setTurnOn(Boolean.TRUE);
+        thermostat.setTurnOff(Boolean.FALSE);
+        thermostat.setAutoMode(Boolean.FALSE);
+        thermostat.setTemporaryMode(Boolean.FALSE);
+        thermostat.setTemperatureMode(null);
+        thermostat.setHumidity(0);
+        thermostat.setIsCooling(Boolean.FALSE);
+        thermostat.setIsHeating(Boolean.FALSE);
+        thermostat.setTargetTemperature(0.0);
+        thermostat.setCurrentTemperature(0.0);
+    }
+
 
 
 
