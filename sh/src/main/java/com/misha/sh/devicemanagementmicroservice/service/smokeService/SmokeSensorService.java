@@ -8,14 +8,19 @@ import com.misha.sh.devicemanagementmicroservice.pagination.PageResponse;
 import com.misha.sh.devicemanagementmicroservice.repository.SmokeSensorRepository;
 import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.SmokeSensorRequest;
 import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.SmokeSensorResponse;
+import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alaramMaintenence.AlarmMaintenanceDateResponse;
 import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alarm.AlarmRequest;
 import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alarm.AlarmResponse;
+import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alarmSensitivity.AlarmSensitivityResponse;
+import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alarmSensitivity.AlarmSensitivityRequest;
+import com.misha.sh.devicemanagementmicroservice.service.emailService.EmailAlarmTemplate;
+import com.misha.sh.devicemanagementmicroservice.service.emailService.EmailService;
+import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.jackson.JsonMixinModuleEntries;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,10 +36,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SmokeSensorService {
+    private static final  Double maxSmokeThreshold = 1.0; // Ths is maximal available value before beginning alarm yell; IN PPM
 
     private final SmokeSensorRepository smokeSensorRepository;
     private final SmokeSensorMapper smokeSensorMapper;
-    private final JsonMixinModuleEntries jsonMixinModuleEntries;
+    private final EmailService emailService;
 
     //todo find all
     //todo findById
@@ -46,6 +52,7 @@ public class SmokeSensorService {
         mappedSensor.setActive(true);
         mappedSensor.setTurnOn(true);
         mappedSensor.setConnected(true);
+        mappedSensor.setValueForSensitivity(maxSmokeThreshold);
         smokeSensorRepository.save(mappedSensor);
         log.info("Added new smoke sensor: {}", mappedSensor);
         log.info("Beginning smoke sensor mapping");
@@ -106,9 +113,9 @@ public class SmokeSensorService {
 
 
         /*  todo make function which will check current smoke level! if smoke threshold is higher than normal turn on alarm function!
-            todo alarm function turnOn
-            todo alarm function turnOff
-            todo set alarm sensitivity
+        //    todo alarm function turnOn
+        //    todo alarm function turnOff
+       //     todo set alarm sensitivity
             todo function which making self testing
             todo function which showing you last MaintenanceDate!
             todo function which service people setting last MaintenanceDate!
@@ -116,58 +123,175 @@ public class SmokeSensorService {
             todo function turnOff smoke sensor
             todo function setLowEnergyConsuming mode
             todo function setDefaultEnergy consuming mode!
+
+            First thing tomorrow!
+            todo change authentication in one single method and use for all methods
          */
 
-            private static final Double smokeThreshold = 0.5; // in ppm
-            private static final Double smokeLevel
-
-    //
-        public AlarmResponse turnOnAlarmSmokeLevelHigh(Integer smokeSensorId,
-                                                       @Valid AlarmRequest request) {
+    // while smoke in apartment should equal danger value alarm working
+    // , when value will equals like default value should  turnOffAuto!
+        @Transactional(rollbackOn = BusinessException.class)
+        public AlarmResponse turnOnAlarmSmokeSensorLevelHigh(Integer smokeSensorId,
+                                                       @Valid AlarmRequest request,
+                                                       Authentication authentication) throws MessagingException {
+            User user = ((User) authentication.getPrincipal());
             var smokeSensor = smokeSensorRepository.findById(smokeSensorId)
                     .orElseThrow(
                             () -> new EntityNotFoundException("Smoke sensor not found")
                     );
-                    smokeSensor.setAlarmActive(true);
-                    if(smokeSensor.getAlarmActive().equals(true)){
+                        log.info("Smoke sensor was found: {}", smokeSensor);
+                        if(!user.getId().equals(smokeSensor.getUser().getId())) {
+                            log.warn("Smoke sensor {} is not owned by user {}", smokeSensorId, user.getId());
+                            throw new AccessDeniedException("You dont have permission to access smoke sensor");
+                        }
                         setRequestedAlarmData(smokeSensor, request);
-                    }
-                    var savedSmokesensor = smokeSensorRepository.save(smokeSensor);
+                        log.info("Alarm data was successfully set!");
 
+                        var savedSmokesensor = smokeSensorRepository.save(smokeSensor);
+                        log.info("Alarm data was successfully saved!");
 
+                            if(smokeSensor.getAlarmActive().equals(true)){
+                                log.info("Sending alarm email");
+                                sendAlarmEmail(user);
 
-
-
-
-
-
-
-
-            // send notification to the user in email!
-
+                             }
+                                 else {
+                                     throw new BusinessException("Big problem with Email Alarm Template!");
+                                      }
+                                return smokeSensorMapper.toAlarmResponse(savedSmokesensor);
         }
 
-        private SmokeSensor setRequestedAlarmData(SmokeSensor smokeSensor, AlarmRequest request) {
-            if(request.getSmokeThreshold() >= request.getSmokeLevel()) {
+    // function which will turn on Alarm
+    public  void  turnOnAlarmThroughApplication(Authentication authentication,
+                                                Integer smokeSensorId) throws MessagingException {
+        User user = ((User) authentication.getPrincipal());
+        var smokeSensor = smokeSensorRepository.findById(smokeSensorId)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Smoke sensor not found")
+                );
+        if(!user.getId().equals(smokeSensor.getUser().getId())) {
+            log.warn("Smoke sensor {} is not owned by user {}", smokeSensorId, user.getId());
+            throw new AccessDeniedException("You dont have permission to access smoke sensor");
+        }
+        setAlarmTurnOn(smokeSensor);
+    }
+    // function for turning off
+    public void turnOffAlarmThroughApplication( Integer smokeSensorId,
+                                                Authentication authentication){
+            User user = ((User) authentication.getPrincipal());
+            var smokeSensor = smokeSensorRepository.findById(smokeSensorId)
+                    .orElseThrow(
+                            () -> new EntityNotFoundException("Smoke sensor not found")
+                    );
+                if(!user.getId().equals(smokeSensor.getUser().getId())) {
+                    log.warn("Smoke sensor {} is not owned by user {}", smokeSensorId, user.getId());
+                    throw new AccessDeniedException("You dont have permission to access smoke sensor");
+                }
+                setAlarmTurnOff(smokeSensor);
+    }
+
+
+
+
+
+    // set alarm sensitivity!
+    @Transactional(rollbackOn = BusinessException.class)
+        public AlarmSensitivityResponse setAlarmSensitivity(AlarmSensitivityRequest alarmSensitivityRequest,
+                                                            Integer smokeSensorId,
+                                                            Authentication  authentication   ){
+                    User user = ((User) authentication.getPrincipal());
+                        var smokeSensor = smokeSensorRepository.findById(smokeSensorId)
+                             .orElseThrow(
+                                     () -> new EntityNotFoundException("Smoke sensor not found")
+                                );
+                        if(!user.getId().equals(smokeSensor.getUser().getId())) {
+                            log.warn("Smoke sensor {} is not owned by user {}", smokeSensorId, user.getId());
+                            throw new AccessDeniedException("You dont have permission to access smoke sensor");
+                            }
+                    if(alarmSensitivityRequest.getValueForSensitivity() > maxSmokeThreshold){
+                        log.info("Value should be between 0 and 1");
+                         throw new BusinessException("Value should be between 0 and 1");
+                    }
+                    if(smokeSensor.getValueForSensitivity().equals(alarmSensitivityRequest.getValueForSensitivity())){
+                        throw new BusinessException("Value already set! Try another value!");
+                 }
+             var newSmokeSensor = setAlarmSensitivity(alarmSensitivityRequest, smokeSensor);
+                    return smokeSensorMapper.toAlarmSensitivityResponse(newSmokeSensor);
+        }
+
+        public AlarmMaintenanceDateResponse showLastMaintenanceDate (Integer smokeSensorId, Authentication authentication){
+            User user = ((User) authentication.getPrincipal());
+            var smokeSensor = smokeSensorRepository.findById(smokeSensorId)
+                    .orElseThrow(() -> new EntityNotFoundException("Smoke sensor not found"));
+            if(!user.getId().equals(smokeSensor.getUser().getId())) {
+                log.warn("Smoke sensor {} is not owned by user {}", smokeSensorId, user.getId());
+                throw new AccessDeniedException("You dont have permission to access smoke sensor");
+            }
+            return smokeSensorMapper.toAlarmMaintenanceDateResponse(smokeSensor);
+        }
+
+        public AlarmMaintenanceDateResponse createLastMaintenanceDate(Integer smokeSensorId, Authentication authentication){
+            User user = ((User) authentication.getPrincipal());
+            var smokeSensor = smokeSensorRepository.findById(smokeSensorId)
+                    .orElseThrow(() -> new EntityNotFoundException("Smoke sensor not found"));
+            if(!user.getId().equals(smokeSensor.getUser().getId())) {
+                log.warn("Smoke sensor {} is not owned by user {}", smokeSensorId, user.getId());
+                throw new AccessDeniedException("You dont have permission to access smoke sensor");
+            }
+                smokeSensor.setLastMaintenanceDate(LocalDateTime.now());
+                smokeSensorRepository.save(smokeSensor);
+                return smokeSensorMapper.toAlarmMaintenanceDateResponse(smokeSensor);
+        }
+            
+
+
+
+
+        private SmokeSensor setAlarmSensitivity(AlarmSensitivityRequest alarmSensitivityRequest, SmokeSensor smokeSensor){
+
+            smokeSensor.setValueForSensitivity(alarmSensitivityRequest.getValueForSensitivity());
+            smokeSensor.setSensitivity(alarmSensitivityRequest.getSensitivity());
+           return smokeSensorRepository.save(smokeSensor);
+        }
+
+
+        private void setRequestedAlarmData(SmokeSensor smokeSensor, AlarmRequest request) {
+            if(request.getSmokeThreshold() >= request.getSmokeLevel() && smokeSensor.getAlarmActive().equals(false)) {
                 smokeSensor.setSmokeLevel(request.getSmokeLevel());
                 smokeSensor.setSmokeThreshold(request.getSmokeThreshold());
                 smokeSensor.setLastAlarmTime(LocalDateTime.now());
+                smokeSensor.setAlarmActive(true);
+                smokeSensorRepository.save(smokeSensor);
             }
             else{
                 throw new BusinessException("Problem in setRequestedAlarmData function!");
             }
-            return smokeSensor;
         }
-            private void sendNotificationToTheUserEmailAboutAlarm(){
 
-            }
+        private void setAlarmTurnOn(SmokeSensor smokeSensor){
+            smokeSensor.setAlarmActive(true);
+            smokeSensor.setLastAlarmTime(LocalDateTime.now());
+            smokeSensorRepository.save(smokeSensor);
+        }
+
+        private void setAlarmTurnOff(SmokeSensor smokeSensor){
+            smokeSensor.setAlarmActive(false);
+            smokeSensorRepository.save(smokeSensor);
+        }
 
 
 
-
-    // function which will turn on Alarm
-    private void  turnOnAlarm(Authentication authentication, Integer smokeSensorId){
-        User user = ((User) authentication.getPrincipal());
+    private void sendAlarmEmail(User user) throws MessagingException {
+        emailService.sendAlarmEmail(
+                user.getEmail(),
+                user.getFullName(),
+                EmailAlarmTemplate.ACTIVATE_ALARM,
+                "Turning on Alarm!"
+        );
     }
+
+
+
+
 
 }
