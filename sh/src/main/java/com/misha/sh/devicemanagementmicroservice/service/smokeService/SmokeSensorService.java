@@ -13,6 +13,8 @@ import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alarm.Alarm
 import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alarm.AlarmResponse;
 import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alarmSensitivity.AlarmSensitivityResponse;
 import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alarmSensitivity.AlarmSensitivityRequest;
+import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.turnOnAndOffSmokeSensor.SmokeSensorTurnOffResponse;
+import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.turnOnAndOffSmokeSensor.SmokeSensorTurnOnResponse;
 import com.misha.sh.devicemanagementmicroservice.service.emailService.EmailAlarmTemplate;
 import com.misha.sh.devicemanagementmicroservice.service.emailService.EmailService;
 import jakarta.mail.MessagingException;
@@ -117,8 +119,8 @@ public class SmokeSensorService {
         //    todo alarm function turnOff
        //     todo set alarm sensitivity
             todo function which making self testing
-            todo function which showing you last MaintenanceDate!
-            todo function which service people setting last MaintenanceDate!
+         //   todo function which showing you last MaintenanceDate!
+         //   todo function which service people setting last MaintenanceDate!
             todo  function turn on smoke sensor
             todo function turnOff smoke sensor
             todo function setLowEnergyConsuming mode
@@ -242,7 +244,35 @@ public class SmokeSensorService {
                 smokeSensorRepository.save(smokeSensor);
                 return smokeSensorMapper.toAlarmMaintenanceDateResponse(smokeSensor);
         }
-            
+            @Transactional
+            public SmokeSensorTurnOnResponse turnOnSmokeSensor(Integer smokeSensorId, Authentication authentication){
+                    User user = ((User) authentication.getPrincipal());
+                    var smokeSensor = smokeSensorRepository.findById(smokeSensorId)
+                            .orElseThrow(() -> new EntityNotFoundException("Smoke sensor not found"));
+                    if(!user.getId().equals(smokeSensor.getUser().getId())) {
+                        log.warn("Smoke sensor {} is not owned by user {}", smokeSensorId, user.getId());
+                    }
+                        smokeSensor.setTurnOn(true);
+                        smokeSensor.setActive(true);
+                        smokeSensor.setConnected(true);
+                        smokeSensorRepository.save(smokeSensor);
+                        return smokeSensorMapper.toSmokeSensorTurnOnResponse(smokeSensor);
+            }
+                @Transactional
+                public SmokeSensorTurnOffResponse turnOffSmokeSensor(Integer smokeSensorId, Authentication authentication){
+                    User user = ((User) authentication.getPrincipal());
+                    var smokeSensor = smokeSensorRepository.findById(smokeSensorId)
+                            .orElseThrow(() -> new EntityNotFoundException("Smoke sensor not found"));
+                    if(!user.getId().equals(smokeSensor.getUser().getId())) {
+                        log.warn("Smoke sensor {} is not owned by user {}", smokeSensorId, user.getId());
+                    }
+                    smokeSensor.setTurnOn(false);
+                    smokeSensor.setActive(false);
+                    smokeSensor.setConnected(false);
+                    smokeSensor.setTurnOff(true);
+                    smokeSensorRepository.save(smokeSensor);
+                    return smokeSensorMapper.toSmokeSensorTurnOffResponse(smokeSensor);
+                }
 
 
 
