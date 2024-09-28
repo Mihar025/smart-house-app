@@ -6,6 +6,8 @@ import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.SmokeSensor
 import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alaramMaintenence.AlarmMaintenanceDateResponse;
 import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alarm.AlarmResponse;
 import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alarmSensitivity.AlarmSensitivityResponse;
+import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.turnOnAndOffSmokeSensor.SmokeSensorTurnOffResponse;
+import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.turnOnAndOffSmokeSensor.SmokeSensorTurnOnResponse;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -56,6 +58,24 @@ public class SmokeSensorMapper {
         return AlarmMaintenanceDateResponse.builder()
                 .smokeSensorId(smokeSensor.getId())
                 .lastMaintenanceDate(smokeSensor.getLastMaintenanceDate())
+                .build();
+    }
+
+    public SmokeSensorTurnOnResponse toSmokeSensorTurnOnResponse(SmokeSensor smokeSensor) {
+        return SmokeSensorTurnOnResponse.builder()
+                .smokeSensorId(smokeSensor.getId())
+                .turnOn(smokeSensor.isTurnOn())
+                .turnOff(smokeSensor.isTurnOff())
+                .isConnected(smokeSensor.isConnected())
+                .build();
+    }
+
+    public SmokeSensorTurnOffResponse toSmokeSensorTurnOffResponse(SmokeSensor smokeSensor) {
+        return SmokeSensorTurnOffResponse.builder()
+                .smokeSensorId(smokeSensor.getId())
+                .turnOn(smokeSensor.isTurnOn())
+                .turnOff(smokeSensor.isTurnOff())
+                .isConnected(smokeSensor.isConnected())
                 .build();
     }
 }
