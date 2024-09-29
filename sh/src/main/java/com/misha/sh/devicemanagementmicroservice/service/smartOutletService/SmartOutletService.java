@@ -455,7 +455,7 @@ public class SmartOutletService {
      * This method is typically called when resetting a smart outlet to its default state or
      * when initializing a new smart outlet with standard values.
      */
-    private void setDefaultEnergyConsuming(SmartOutlet smartOutlet) {
+    public void setDefaultEnergyConsuming(SmartOutlet smartOutlet) {
         smartOutlet.setVoltage(voltage);
         smartOutlet.setAmps(amps);
         smartOutlet.setEnergyConsumingPerHours(energyConsumingPerHours);
@@ -488,7 +488,7 @@ public class SmartOutletService {
     }
 
 
-    private SmartOutlet updateSmartOutletEnergyConsuming(SmartOutlet existingOutlet, SmartOutletEnergyConsumingRequest request) {
+    public SmartOutlet updateSmartOutletEnergyConsuming(SmartOutlet existingOutlet, SmartOutletEnergyConsumingRequest request) {
         existingOutlet.setVoltage(request.getVoltage());
         existingOutlet.setAmps(request.getAmps());
         existingOutlet.setEnergyConsumingPerHours(request.getEnergyConsumingPerHours());
