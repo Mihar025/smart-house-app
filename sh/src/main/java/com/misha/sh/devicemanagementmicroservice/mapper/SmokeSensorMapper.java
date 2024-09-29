@@ -6,6 +6,8 @@ import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.SmokeSensor
 import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alaramMaintenence.AlarmMaintenanceDateResponse;
 import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alarm.AlarmResponse;
 import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.alarmSensitivity.AlarmSensitivityResponse;
+import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.modes.SmokeSensorDefaultEnergyConsumingModeResponse;
+import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.modes.SmokeSensorLowEnergyConsumingModeResponse;
 import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.turnOnAndOffSmokeSensor.SmokeSensorTurnOffResponse;
 import com.misha.sh.devicemanagementmicroservice.request.smokeSensor.turnOnAndOffSmokeSensor.SmokeSensorTurnOnResponse;
 import org.springframework.stereotype.Service;
@@ -77,5 +79,23 @@ public class SmokeSensorMapper {
                 .turnOff(smokeSensor.isTurnOff())
                 .isConnected(smokeSensor.isConnected())
                 .build();
+    }
+
+    public SmokeSensorLowEnergyConsumingModeResponse toSmokeLowEnergyConsumingMode(SmokeSensor smokeSensor) {
+        return SmokeSensorLowEnergyConsumingModeResponse.builder()
+                .smokeSensorId(smokeSensor.getId())
+                .amps(smokeSensor.getAmps())
+                .voltage(smokeSensor.getVoltage())
+                .energyConsumingPerHours(smokeSensor.getEnergyConsumingPerHours())
+                .build();
+    }
+
+    public SmokeSensorDefaultEnergyConsumingModeResponse toSmokeDefaultEnergyConsumingMode(SmokeSensor smokeSensor) {
+            return SmokeSensorDefaultEnergyConsumingModeResponse.builder()
+                    .smokeSensorId(smokeSensor.getId())
+                    .amps(smokeSensor.getAmps())
+                    .voltage(smokeSensor.getVoltage())
+                    .energyConsumingPerHours(smokeSensor.getEnergyConsumingPerHours())
+                    .build();
     }
 }
