@@ -1,6 +1,5 @@
 package com.misha.sh.weatherService;
 
-import com.misha.sh.devicemanagementmicroservice.exception.BusinessCreatingFailedException;
 import com.misha.sh.devicemanagementmicroservice.exception.BusinessDeleteException;
 import com.misha.sh.devicemanagementmicroservice.exception.BusinessException;
 import com.misha.sh.devicemanagementmicroservice.mapper.WeatherMapper;
