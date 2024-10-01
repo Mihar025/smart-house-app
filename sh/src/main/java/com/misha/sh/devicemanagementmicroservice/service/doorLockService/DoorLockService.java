@@ -5,6 +5,7 @@ import com.misha.sh.devicemanagementmicroservice.mapper.DoorLockMapper;
 import com.misha.sh.devicemanagementmicroservice.model.device.DeviceStatus;
 import com.misha.sh.devicemanagementmicroservice.model.device.DeviceType;
 import com.misha.sh.devicemanagementmicroservice.model.doorLock.DoorLock;
+import com.misha.sh.devicemanagementmicroservice.model.doorLock.FingerPrintCode;
 import com.misha.sh.devicemanagementmicroservice.model.doorLock.LockMechanism;
 import com.misha.sh.devicemanagementmicroservice.model.doorLock.LockStatus;
 import com.misha.sh.devicemanagementmicroservice.model.User;
@@ -12,10 +13,7 @@ import com.misha.sh.devicemanagementmicroservice.model.smartOutlet.SmartOutlet;
 import com.misha.sh.devicemanagementmicroservice.pagination.PageResponse;
 import com.misha.sh.devicemanagementmicroservice.repository.DoorLockRepository;
 import com.misha.sh.devicemanagementmicroservice.repository.UserRepository;
-import com.misha.sh.devicemanagementmicroservice.request.doorLock.DoorLockAccessCodeRequest;
-import com.misha.sh.devicemanagementmicroservice.request.doorLock.DoorLockRequest;
-import com.misha.sh.devicemanagementmicroservice.request.doorLock.DoorLockResponse;
-import com.misha.sh.devicemanagementmicroservice.request.doorLock.DoorLockStatus;
+import com.misha.sh.devicemanagementmicroservice.request.doorLock.*;
 import com.misha.sh.devicemanagementmicroservice.request.smartOutlet.SmartOutletResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -32,6 +30,10 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.misha.sh.devicemanagementmicroservice.model.doorLock.FingerPrintCode.FINGER_PRINT_CODE;
+import static com.misha.sh.devicemanagementmicroservice.model.doorLock.LockMechanism.FINGER_PRINT;
+import static com.misha.sh.devicemanagementmicroservice.model.doorLock.LockMechanism.PIN_COD;
 
 @Slf4j
 @Service
@@ -90,6 +92,17 @@ public class DoorLockService {
                 doorLocks.isLast()
         );
     }
+    @Transactional(rollbackOn = Exception.class)
+    public void deleteDoorLockById(Integer doorLockId, Authentication authentication) {
+        User user = ((User) authentication.getPrincipal());
+        var doorLock = doorLockRepository.findById(doorLockId).orElseThrow(
+                () -> new EntityNotFoundException("DoorLock with this id does not exist")
+        );
+        if(!user.getId().equals(doorLock.getUser().getId())) {
+            throw new AccessDeniedException("You do not have permission to access this resource");
+        }
+        doorLockRepository.deleteById(doorLock.getId());
+    }
 
 
 
@@ -102,49 +115,97 @@ public class DoorLockService {
         return doorLockMapper.toDoorLockResponse(smartLock);
         }
 
+    public void changeAccessCode(Authentication authentication, ChangeDoorLockRequest request, Integer doorLockId) {
+        User user = authenticateUser(authentication);
+        DoorLock doorLock = doorLockRepository.findById(doorLockId)
+                .orElseThrow(() -> new EntityNotFoundException("DoorLock with this id does not exist"));
 
-        public void changeAccessCode(Authentication authentication, Integer accessCode, Integer doorLockId) {
-            authenticateUser(authentication);
-                    var doorLock = doorLockRepository.findById(doorLockId)
-                            .orElseThrow(() -> new EntityNotFoundException("DoorLock with this id does not exist"));
-                    if(doorLock.getAccessCode().equals(accessCode)){
-                        throw new BusinessException("DoorLock with this access code already exists");
-                    }
-                    doorLock.setAccessCode(accessCode);
-                    doorLockRepository.save(doorLock);
+        if (!doorLock.getUser().getId().equals(user.getId())) {
+            throw new AccessDeniedException("You don't have permission to change this door lock's code");
         }
 
-            public DoorLockStatus openDoorLock(Authentication authentication, Integer doorLockId, Integer accessCode) {
-                  User user =  authenticateUser(authentication);
-                  log.info("User was successfully authenticated");
-                  DoorLock doorLock = getDoorLock(doorLockId);
-                  log.info("Door lock was successfully founded!");
+        if (doorLock.getAccessCode().equals(request.getDoorCode())) {
+            throw new BusinessException("New access code must be different from the current one");
+        }
 
-                  var lock = doorLockRepository.findById(doorLockId)
-                          .orElseThrow(EntityNotFoundException::new);
+        doorLock.setAccessCode(request.getDoorCode());
+        doorLockRepository.save(doorLock);
+    }
 
-                    if(!user.getId().equals(lock.getUser().getId())) {
-                        log.warn("User with this id does not match");
-                        throw new BusinessException("User with this id does not match");
-                    }
 
-                  if(!accessCode.equals(doorLock.getAccessCode())){
-                    log.warn("Invalid access code attempt for door lock {}", doorLockId);
-                    throw new BusinessException("DoorLock with this access code does not exist");
+            // SWITCH CASE : PIN CODE, OR FINGER PRINT
+            public void setOpeningType(Integer doorLockId, LockMechanism openingType, Integer accessCode,  Authentication authentication) {
+                User user = ((User) authentication.getPrincipal());
+                var doorLock = doorLockRepository.findById(doorLockId)
+                        .orElseThrow(() -> new EntityNotFoundException("DoorLock with this id does not exist"));
+                if(!user.getId().equals(doorLock.getUser().getId())) {
+                    throw new BusinessException("User with this id does not match");
                 }
-
-                    doorLock.setLastOpenedAt(LocalDateTime.now());
-                    doorLock.setOpened(true);
-                    doorLock.setLockStatus(LockStatus.UNLOCKED);
-                    doorLockRepository.save(doorLock);
-                    lockSchedulerService.scheduleLock(doorLockId,AUTO_LOCK_DELAY_MINUTES);
-
-                    return doorLockMapper.toDoorLockStatus(doorLock);
+                switch (openingType){
+                    case PIN_COD:
+                        if(accessCode == null){
+                            throw new BusinessException("Access code is required and cannot be null");
+                        }
+                        setDoorLockAccessCode(doorLock, accessCode);
+                        break;
+                    case FINGER_PRINT:
+                        setFingerPrintOnDoorLock(doorLock);
+                        break;
+                    case BOTH:
+                        if (accessCode == null) {
+                            throw new IllegalArgumentException("Access code is required for BOTH type");
+                        }
+                        setDoorLockAccessCode(doorLock, accessCode);
+                        setFingerPrintOnDoorLock(doorLock);
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Invalid opening type");
+                }
+                doorLockRepository.save(doorLock);
             }
+
+
+
+
+
+    public DoorLockStatus openDoorLock(Authentication authentication, Integer doorLockId, Integer accessCode, String fingerPrintCode) {
+        User user = authenticateUser(authentication);
+        log.info("User was successfully authenticated");
+        var doorLock = getDoorLock(doorLockId, authentication);
+        log.info("Door lock was successfully found!");
+
+        switch (doorLock.getLockMechanism()) {
+            case PIN_COD:
+                if (accessCode == null || !accessCode.equals(doorLock.getAccessCode())) {
+                    log.warn("Invalid access code attempt for door lock {}", doorLockId);
+                    throw new BusinessException("Invalid access code");
+                }
+                break;
+            case FINGER_PRINT:
+                if (fingerPrintCode == null || !fingerPrintCode.equals(doorLock.getFingerPrintCode())) {
+                    log.warn("Invalid fingerprint attempt for door lock {}", doorLockId);
+                    throw new BusinessException("Invalid fingerprint");
+                }
+                break;
+            case BOTH:
+                if ((accessCode == null || !accessCode.equals(doorLock.getAccessCode())) &&
+                        (fingerPrintCode == null || !fingerPrintCode.equals(doorLock.getFingerPrintCode()))) {
+                    log.warn("Invalid access attempt for door lock {}", doorLockId);
+                    throw new BusinessException("Invalid access code and fingerprint");
+                }
+                break;
+            default:
+                throw new BusinessException("Invalid lock mechanism");
+        }
+        var updatedSettingDoorLock = setDoorLockOpenedSetting(doorLock);
+        lockSchedulerService.scheduleLock(doorLockId, AUTO_LOCK_DELAY_MINUTES);
+        return doorLockMapper.toDoorLockStatus(updatedSettingDoorLock);
+    }
+
 
                 public DoorLockStatus closeDoorLock(Authentication authentication, Integer doorLockId, Integer accessCode) {
                         User user =  authenticateUser(authentication);
-                        DoorLock doorLock = getDoorLock(doorLockId);
+                        DoorLock doorLock = getDoorLock(doorLockId, authentication);
                         if(!user.getId().equals(doorLock.getUser().getId())) {
                             log.warn("User with this id does not match");
                             throw new BusinessException("User with this id does not match");
@@ -155,13 +216,11 @@ public class DoorLockService {
                         log.warn("Invalid  access code attempt for door lock {}", doorLockId);
                         throw new BusinessException("DoorLock with this access code does not exist");
                     }
-                        doorLock.setLastClosedAt(LocalDateTime.now());
-                        doorLock.setOpened(false);
-                        doorLock.setLocked(true);
-                        doorLock.setLockStatus(LockStatus.LOCKED);
-                        doorLockRepository.save(doorLock);
-                    return doorLockMapper.toDoorLockStatus(doorLock);
+                     var closedDoorLock = setClosingDoorLockSettings(doorLock);
+                    return doorLockMapper.toDoorLockStatus(closedDoorLock);
                 }
+
+
 
     private void addLock(DoorLockRequest doorLockRequest, DoorLock doorLock) {
         doorLock.setDeviceName(doorLockRequest.getDeviceName());
@@ -172,9 +231,19 @@ public class DoorLockService {
         doorLock.setSerialNumber(doorLockRequest.getSerialNumber());
         doorLock.setStatus(DeviceStatus.ACTIVE);
         doorLock.setAccessCode(doorLockRequest.getAccessCode());
-        doorLock.setLockMechanism(LockMechanism.PIN_COD);
+        doorLock.setLockMechanism(PIN_COD);
         doorLock.setRemoteAccessEnabled(true);
     }
+
+    private DoorLock setClosingDoorLockSettings(DoorLock doorLock){
+        doorLock.setLastClosedAt(LocalDateTime.now());
+        doorLock.setOpened(false);
+        doorLock.setLocked(true);
+        doorLock.setLockStatus(LockStatus.LOCKED);
+        doorLockRepository.save(doorLock);
+        return doorLock;
+    }
+
 
     private User authenticateUser(Authentication authentication) {
         User user = ((User) authentication.getPrincipal());
@@ -183,9 +252,49 @@ public class DoorLockService {
 
     }
 
-    private DoorLock getDoorLock(Integer doorLockId) {
-        return doorLockRepository.findById(doorLockId)
+    private DoorLock getDoorLock(Integer doorLockId, Authentication authentication) {
+        User user = authenticateUser(authentication);
+        var doorLock =  doorLockRepository.findById(doorLockId)
                 .orElseThrow(() -> new EntityNotFoundException("DoorLock with this id does not exist"));
+        if(!user.getId().equals(doorLock.getUser().getId())) {
+            log.warn("User with this id does not match");
+            throw new BusinessException("User with this id does not match");
+        }
+        return doorLock;
     }
+
+
+
+
+    private DoorLock setDoorLockOpenedSetting(DoorLock doorLock){
+        doorLock.setLastOpenedAt(LocalDateTime.now());
+        doorLock.setOpened(true);
+        doorLock.setLockStatus(LockStatus.UNLOCKED);
+        doorLockRepository.save(doorLock);
+        return doorLock;
+    }
+
+
+
+    // FUNCTION FOR SETTING ACCESS CODE
+    private void setDoorLockAccessCode(DoorLock doorLock, Integer accessCode){
+        doorLock.setAccessCode(accessCode);
+        doorLock.setLockMechanism(PIN_COD);
+        setDoorCloseAfterChangingOrAddingLockType(doorLock);
+    }
+
+    private void setFingerPrintOnDoorLock(DoorLock doorLock){
+        doorLock.setFingerPrintCode(FINGER_PRINT_CODE);
+        doorLock.setLockMechanism(FINGER_PRINT);
+        setDoorCloseAfterChangingOrAddingLockType(doorLock);
+    }
+
+    private void setDoorCloseAfterChangingOrAddingLockType(DoorLock doorLock){
+        doorLock.setLockStatus(LockStatus.LOCKED);
+        doorLock.setLocked(true);
+        doorLock.setOpened(false);
+    }
+
+
 
 }
