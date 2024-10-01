@@ -3,7 +3,6 @@ package com.misha.sh.devicemanagementmicroservice.service.lightSwitchService;
 
 import com.misha.sh.devicemanagementmicroservice.exception.BusinessException;
 import com.misha.sh.devicemanagementmicroservice.mapper.LightSwitchMapper;
-import com.misha.sh.devicemanagementmicroservice.mapper.ModeMapper;
 import com.misha.sh.devicemanagementmicroservice.model.swtichLight.LightSwitch;
 import com.misha.sh.devicemanagementmicroservice.model.User;
 import com.misha.sh.devicemanagementmicroservice.pagination.PageResponse;
@@ -17,7 +16,6 @@ import com.misha.sh.devicemanagementmicroservice.request.lightSwitch.brightness.
 import com.misha.sh.devicemanagementmicroservice.request.lightSwitch.switchTurnOff.SwitchTurnOffResponse;
 import com.misha.sh.devicemanagementmicroservice.request.lightSwitch.switchTurnOn.SwitchTurnOnRequest;
 import com.misha.sh.devicemanagementmicroservice.request.lightSwitch.switchTurnOn.SwitchTurnOnResponse;
-import com.misha.sh.devicemanagementmicroservice.service.modeService.ModeService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -42,11 +40,7 @@ public class LightSwitchService {
 
     private final LightSwitchRepository lightSwitchRepository;
     private final LightSwitchMapper lightSwitchMapper;
-    private final ModeService modeService;
-    private final ModeMapper modeMapper;
 
-    //todo find switch by id
-    //todo find all available switch
 
 
 
