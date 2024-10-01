@@ -8,7 +8,9 @@ import lombok.*;
 @AllArgsConstructor
 public class DoorLockAccessCodeRequest {
 
-    private String accessCode;
+    private Integer accessCode;
+    private String fingerPrintCode;
+
 
 
 }
