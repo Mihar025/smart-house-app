@@ -20,7 +20,7 @@ import java.util.Set;
 public class DoorLock  extends Device {
 
     private Integer accessCode;
-
+    private FingerPrintCode fingerPrintCode;
 
     private boolean autoLockEnabled;
 
@@ -29,9 +29,7 @@ public class DoorLock  extends Device {
 
     private int autoLockDelaySeconds;
 
-
     private boolean tamperAlarmEnabled;
-
 
     private boolean remoteAccessEnabled;
 
@@ -43,7 +41,6 @@ public class DoorLock  extends Device {
 
     @Enumerated(EnumType.STRING)
     private DoorSensor doorSensor;
-
 
     @Enumerated(EnumType.STRING)
     private LockStatus lockStatus;
