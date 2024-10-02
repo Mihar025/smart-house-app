@@ -16,6 +16,7 @@ import com.misha.sh.devicemanagementmicroservice.request.smartOutlet.scheduling.
 import com.misha.sh.devicemanagementmicroservice.request.smartOutlet.turnOnRequests.SmartOutletTurnOffResponse;
 import com.misha.sh.devicemanagementmicroservice.request.smartOutlet.turnOnRequests.SmartOutletTurnOnResponse;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -143,6 +144,17 @@ public class SmartOutletService {
                 );
          }
 
+         @Transactional(rollbackOn = Exception.class)
+         public void deleteSmartOutletById(Integer outletId, Authentication authentication) {
+            User user = ((User) authentication.getPrincipal());
+            var smartOutlet = smartOutletRepository.findById(outletId)
+                    .orElseThrow(() -> new EntityNotFoundException("Cannot find outlet with id " + outletId));
+            if(!user.getId().equals(smartOutlet.getUser().getId())){
+                throw new AccessDeniedException("You dont have permission to access this outlet");
+            }
+            smartOutletRepository.deleteById(outletId);
+         }
+
 
     /**
      * Turns on a specific smart outlet.
@@ -213,13 +225,6 @@ public class SmartOutletService {
                 outlet.getLastOnTime()
         );
     }
-
-
-
-
-
-
-
 
 
     /**

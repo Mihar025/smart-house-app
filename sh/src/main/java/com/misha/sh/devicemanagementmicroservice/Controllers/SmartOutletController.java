@@ -13,9 +13,11 @@ import com.misha.sh.devicemanagementmicroservice.request.smartOutlet.turnOnReque
 import com.misha.sh.devicemanagementmicroservice.request.smartOutlet.turnOnRequests.SmartOutletTurnOffResponse;
 import com.misha.sh.devicemanagementmicroservice.request.smartOutlet.turnOnRequests.SmartOutletTurnOnResponse;
 import com.misha.sh.devicemanagementmicroservice.service.smartOutletService.SmartOutletService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -132,6 +134,20 @@ public class SmartOutletController {
             Authentication authentication) {
         SmartOutletLastActivityResponse response = smartOutletService.getLastActivity(outletId, authentication);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{outletId}")
+    public ResponseEntity<Void> deleteSmartOutlet(@PathVariable Integer outletId, Authentication authentication) {
+        try {
+            smartOutletService.deleteSmartOutletById(outletId, authentication);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
