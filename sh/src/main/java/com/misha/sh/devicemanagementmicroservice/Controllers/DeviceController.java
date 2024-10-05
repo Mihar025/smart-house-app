@@ -1,6 +1,6 @@
 package com.misha.sh.devicemanagementmicroservice.Controllers;
 
-import com.misha.sh.devicemanagementmicroservice.service.deviceService.DevicService;
+import com.misha.sh.devicemanagementmicroservice.service.deviceService.DeviceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/device")
 public class DeviceController {
 
-    private final DevicService devicService;
+    private final DeviceService deviceService;
 
 }
