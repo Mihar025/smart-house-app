@@ -5,6 +5,7 @@ package com.misha.sh.devicemanagementmicroservice.service.deviceService;
 import com.misha.sh.devicemanagementmicroservice.exception.BusinessException;
 import com.misha.sh.devicemanagementmicroservice.mapper.DeviceMapper;
 import com.misha.sh.devicemanagementmicroservice.mapper.ModeMapper;
+import com.misha.sh.devicemanagementmicroservice.model.User;
 import com.misha.sh.devicemanagementmicroservice.model.device.Device;
 import com.misha.sh.devicemanagementmicroservice.pagination.PageResponse;
 import com.misha.sh.devicemanagementmicroservice.repository.DeviceRepository;
@@ -25,6 +26,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
@@ -33,10 +36,10 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class DevicService {
+public class DeviceService {
     private static final double LOW_BATTERY_THRESHOLD = 20.0;
     private static final double CRITICAL_BATTERY_THRESHOLD = 10.0;
-    private static final Logger log = LoggerFactory.getLogger(DevicService.class);
+    private static final Logger log = LoggerFactory.getLogger(DeviceService.class);
     private final DeviceRepository deviceRepository;
     private final DeviceMapper deviceMapper;
     private final ModeService modeService;
@@ -57,10 +60,20 @@ public class DevicService {
         return deviceMapper.toDeviceResponse(device);
     }
 
-    public PageResponse<DeviceResponse> getAllDevices(int size, int page) {
+    public PageResponse<DeviceResponse> getAllDevices(int size, int page, Authentication authentication) {
+        User user = ((User) authentication.getPrincipal());
         Pageable pageable = PageRequest.of(size, page, Sort.by("createdDate").descending());
         Page<Device> devices = deviceRepository.findAll(pageable);
-        List<DeviceResponse> deviceResponses = devices.map(deviceMapper::toDeviceResponse).stream().toList();
+        List<DeviceResponse> deviceResponses  = devices.getContent().stream()
+                .map( device -> {
+                    if(!user.getId().equals(device.getUser().getId())) {
+                        return deviceMapper.toDeviceResponse(device);
+                    }
+                    else{
+                        throw new AccessDeniedException("You dont have an access!");
+                    }
+                })
+                .toList();
         return new PageResponse<>(
                 deviceResponses,
                 devices.getNumber(),
@@ -72,9 +85,13 @@ public class DevicService {
         );
     }
 
-    public DeviceResponse findDeviceById(Integer id) {
+    public DeviceResponse findDeviceById(Integer id, Authentication authentication) {
+        User user = ((User) authentication.getPrincipal());
         var device = deviceRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("Device not found"));
+        if(!user.getId().equals(device.getUser().getId())) {
+            throw new AccessDeniedException("You dont have an access!");
+        }
         return deviceMapper.toDeviceResponse(device);
     }
 
