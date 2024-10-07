@@ -1,0 +1,5107 @@
+
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenApi specification - Misha",
+    "description": "OpenApi documentation",
+    "termsOfService": "Terms of service",
+    "contact": {
+      "name": "Misha",
+      "email": "mishamay583@gmail.com"
+    },
+    "license": {
+      "name": "no licence",
+      "url": "https://no-licence.com"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8088/api/v1",
+      "description": "Local env"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": [
+
+      ]
+    }
+  ],
+  "paths": {
+    "/weatherSensor/{sensorId}/energy": {
+      "get": {
+        "tags": [
+          "weather-sensor-controller"
+        ],
+        "operationId": "getWeatherSensorEnergyConsuming",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeatherSensorEnergyResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "weather-sensor-controller"
+        ],
+        "operationId": "changeOnCustomEnergyConsuming",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WeatherSensorEnergyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeatherSensorEnergyResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lightSwitch/{switchId}/color-temperature": {
+      "put": {
+        "tags": [
+          "light-switch-controller"
+        ],
+        "operationId": "changeColorTemperature",
+        "parameters": [
+          {
+            "name": "switchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ColorTemperatureRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ColorTemperatureResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lightSwitch/{switchId}/brightness": {
+      "put": {
+        "tags": [
+          "light-switch-controller"
+        ],
+        "operationId": "changeBrightness",
+        "parameters": [
+          {
+            "name": "switchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BrightnessRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BrightnessResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/doorLock/{doorLockId}/access-code": {
+      "put": {
+        "tags": [
+          "door-lock-controller"
+        ],
+        "operationId": "changeAccessCode",
+        "parameters": [
+          {
+            "name": "doorLockId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeDoorLockRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/devices/edit": {
+      "put": {
+        "tags": [
+          "device-controller"
+        ],
+        "operationId": "editDevice",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/air-quality-sensor/{sensorId}/turn-on": {
+      "put": {
+        "tags": [
+          "air-quality-sensor-controller"
+        ],
+        "operationId": "turnOnAirQualitySensor",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/air-quality-sensor/{sensorId}/turn-off": {
+      "put": {
+        "tags": [
+          "air-quality-sensor-controller"
+        ],
+        "operationId": "turnOffAirQualitySensor",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/air-quality-sensor/{sensorId}/low-power-mode": {
+      "put": {
+        "tags": [
+          "air-quality-sensor-controller"
+        ],
+        "operationId": "setLowPowerMode",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/air-quality-sensor/{sensorId}/default-power-mode": {
+      "put": {
+        "tags": [
+          "air-quality-sensor-controller"
+        ],
+        "operationId": "setDefaultPowerMode",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/weatherSensor": {
+      "get": {
+        "tags": [
+          "weather-sensor-controller"
+        ],
+        "operationId": "findAllAvailableSensors",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseWeatherSensorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "weather-sensor-controller"
+        ],
+        "operationId": "addSensor",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WeatherSensorRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeatherSensorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/weatherSensor/{sensorId}/data": {
+      "get": {
+        "tags": [
+          "weather-sensor-controller"
+        ],
+        "operationId": "getWeatherWeatherData",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeatherDataResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "weather-sensor-controller"
+        ],
+        "operationId": "sendAndUpdateWeatherData",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WeatherDataRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeatherDataResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/thermostat": {
+      "get": {
+        "tags": [
+          "thermostat-controller"
+        ],
+        "operationId": "findAllUserThermostats",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseThermostatResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "thermostat-controller"
+        ],
+        "operationId": "addThermostat",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ThermostatRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThermostatResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/thermostat/{thermostatId}/turn-on": {
+      "post": {
+        "tags": [
+          "thermostat-controller"
+        ],
+        "operationId": "turnOnThermostat",
+        "parameters": [
+          {
+            "name": "thermostatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/thermostat/{thermostatId}/turn-off": {
+      "post": {
+        "tags": [
+          "thermostat-controller"
+        ],
+        "operationId": "turnOffThermostat",
+        "parameters": [
+          {
+            "name": "thermostatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/thermostat/{thermostatId}/heat-mode": {
+      "post": {
+        "tags": [
+          "thermostat-controller"
+        ],
+        "operationId": "setThermostatHeatMode",
+        "parameters": [
+          {
+            "name": "thermostatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ThermostatHeatModeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThermostatHeatModeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/thermostat/{thermostatId}/cooling-mode": {
+      "post": {
+        "tags": [
+          "thermostat-controller"
+        ],
+        "operationId": "setThermostatCoolingMode",
+        "parameters": [
+          {
+            "name": "thermostatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ThermostatCoolingModeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThermostatCoolingModeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/smoke-sensor": {
+      "get": {
+        "tags": [
+          "smoke-sensor-controller"
+        ],
+        "operationId": "findAllSmokeSensors",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseSmokeSensorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "smoke-sensor-controller"
+        ],
+        "operationId": "addNewSmokeSensor",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SmokeSensorRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmokeSensorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/smoke-sensor/{smokeSensorId}/turn-on": {
+      "post": {
+        "tags": [
+          "smoke-sensor-controller"
+        ],
+        "operationId": "turnOnSmokeSensor",
+        "parameters": [
+          {
+            "name": "smokeSensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmokeSensorTurnOnResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/smoke-sensor/{smokeSensorId}/turn-off": {
+      "post": {
+        "tags": [
+          "smoke-sensor-controller"
+        ],
+        "operationId": "turnOffSmokeSensor",
+        "parameters": [
+          {
+            "name": "smokeSensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmokeSensorTurnOffResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/smoke-sensor/{smokeSensorId}/sensitivity": {
+      "post": {
+        "tags": [
+          "smoke-sensor-controller"
+        ],
+        "operationId": "setAlarmSensitivity",
+        "parameters": [
+          {
+            "name": "smokeSensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlarmSensitivityRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlarmSensitivityResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/smoke-sensor/{smokeSensorId}/maintenance": {
+      "get": {
+        "tags": [
+          "smoke-sensor-controller"
+        ],
+        "operationId": "showLastMaintenanceDate",
+        "parameters": [
+          {
+            "name": "smokeSensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlarmMaintenanceDateResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "smoke-sensor-controller"
+        ],
+        "operationId": "createLastMaintenanceDate",
+        "parameters": [
+          {
+            "name": "smokeSensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlarmMaintenanceDateResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/smoke-sensor/{smokeSensorId}/low-energy": {
+      "post": {
+        "tags": [
+          "smoke-sensor-controller"
+        ],
+        "operationId": "setLowEnergyConsumingMode",
+        "parameters": [
+          {
+            "name": "smokeSensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmokeSensorLowEnergyConsumingModeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/smoke-sensor/{smokeSensorId}/default-energy": {
+      "post": {
+        "tags": [
+          "smoke-sensor-controller"
+        ],
+        "operationId": "setDefaultEnergyConsumingMode",
+        "parameters": [
+          {
+            "name": "smokeSensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmokeSensorDefaultEnergyConsumingModeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/smoke-sensor/{smokeSensorId}/alarm": {
+      "post": {
+        "tags": [
+          "smoke-sensor-controller"
+        ],
+        "operationId": "turnOnAlarmSmokeSensorLevelHigh",
+        "parameters": [
+          {
+            "name": "smokeSensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlarmRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlarmResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/smoke-sensor/{smokeSensorId}/alarm/on": {
+      "post": {
+        "tags": [
+          "smoke-sensor-controller"
+        ],
+        "operationId": "turnOnAlarmThroughApplication",
+        "parameters": [
+          {
+            "name": "smokeSensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/smoke-sensor/{smokeSensorId}/alarm/off": {
+      "post": {
+        "tags": [
+          "smoke-sensor-controller"
+        ],
+        "operationId": "turnOffAlarmThroughApplication",
+        "parameters": [
+          {
+            "name": "smokeSensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/outlet": {
+      "get": {
+        "tags": [
+          "smart-outlet-controller"
+        ],
+        "operationId": "findAllOutlets",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseSmartOutletResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "smart-outlet-controller"
+        ],
+        "operationId": "addSmartOutlet",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SmartOutletRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmartOutletResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/outlet/{outletId}/turn-on": {
+      "post": {
+        "tags": [
+          "smart-outlet-controller"
+        ],
+        "operationId": "turnOnSmartOutlet",
+        "parameters": [
+          {
+            "name": "outletId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmartOutletTurnOnResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/outlet/{outletId}/turn-off": {
+      "post": {
+        "tags": [
+          "smart-outlet-controller"
+        ],
+        "operationId": "turnOffSmartOutlet",
+        "parameters": [
+          {
+            "name": "outletId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmartOutletTurnOffResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/outlet/{outletId}/schedule-on": {
+      "post": {
+        "tags": [
+          "smart-outlet-controller"
+        ],
+        "operationId": "scheduleTurnOn",
+        "parameters": [
+          {
+            "name": "outletId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScheduleRequestOn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmartOutletScheduleResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/outlet/{outletId}/schedule-off": {
+      "post": {
+        "tags": [
+          "smart-outlet-controller"
+        ],
+        "operationId": "scheduleTurnOff",
+        "parameters": [
+          {
+            "name": "outletId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScheduleRequestOff"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmartOutletScheduleResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/outlet/{outletId}/reset-power-usage": {
+      "post": {
+        "tags": [
+          "smart-outlet-controller"
+        ],
+        "operationId": "resetPowerUsage",
+        "parameters": [
+          {
+            "name": "outletId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmartOutletEnergyConsumingResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/outlet/{outletId}/power-usage": {
+      "get": {
+        "tags": [
+          "smart-outlet-controller"
+        ],
+        "operationId": "getCurrentPowerUsage",
+        "parameters": [
+          {
+            "name": "outletId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmartOutletEnergyConsumingResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "smart-outlet-controller"
+        ],
+        "operationId": "setCustomPowerUsage",
+        "parameters": [
+          {
+            "name": "outletId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SmartOutletEnergyConsumingRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmartOutletEnergyConsumingResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lightSwitch": {
+      "get": {
+        "tags": [
+          "light-switch-controller"
+        ],
+        "operationId": "getAllSwitches",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseLightSwitchResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "light-switch-controller"
+        ],
+        "operationId": "addLightSwitch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LightSwitchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LightSwitchResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lightSwitch/{switchId}/turn-on": {
+      "post": {
+        "tags": [
+          "light-switch-controller"
+        ],
+        "operationId": "turnOnSwitch",
+        "parameters": [
+          {
+            "name": "switchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SwitchTurnOnResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lightSwitch/{switchId}/turn-off": {
+      "post": {
+        "tags": [
+          "light-switch-controller"
+        ],
+        "operationId": "turnOffSwitch",
+        "parameters": [
+          {
+            "name": "switchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SwitchTurnOffResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lightSwitch/{switchId}/preferences": {
+      "post": {
+        "tags": [
+          "light-switch-controller"
+        ],
+        "operationId": "setUserPreferences",
+        "parameters": [
+          {
+            "name": "switchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SwitchTurnOnRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SwitchTurnOnResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/doorLock": {
+      "get": {
+        "tags": [
+          "door-lock-controller"
+        ],
+        "operationId": "findAllDoorLock",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseDoorLockResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "door-lock-controller"
+        ],
+        "operationId": "addDoorLock",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DoorLockRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoorLockResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/doorLock/{doorLockId}/opening-type": {
+      "post": {
+        "tags": [
+          "door-lock-controller"
+        ],
+        "operationId": "setOpeningType",
+        "parameters": [
+          {
+            "name": "doorLockId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "openingType",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PIN_COD",
+                "FINGER_PRINT",
+                "BOTH"
+              ]
+            }
+          },
+          {
+            "name": "accessCode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/doorLock/{doorLockId}/open": {
+      "post": {
+        "tags": [
+          "door-lock-controller"
+        ],
+        "operationId": "openDoorLock",
+        "parameters": [
+          {
+            "name": "doorLockId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DoorLockAccessCodeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoorLockStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/doorLock/{doorLockId}/close": {
+      "post": {
+        "tags": [
+          "door-lock-controller"
+        ],
+        "operationId": "closeDoorLock",
+        "parameters": [
+          {
+            "name": "doorLockId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DoorLockAccessCodeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoorLockStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "authentication-controller"
+        ],
+        "operationId": "registerUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register/business": {
+      "post": {
+        "tags": [
+          "authentication-controller"
+        ],
+        "operationId": "registerBusinessAccount",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationBusinessAccountRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register/admin": {
+      "post": {
+        "tags": [
+          "authentication-controller"
+        ],
+        "operationId": "registerAdmin",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "authentication-controller"
+        ],
+        "operationId": "logout",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/authenticate": {
+      "post": {
+        "tags": [
+          "authentication-controller"
+        ],
+        "operationId": "authenticate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/activate-account": {
+      "post": {
+        "tags": [
+          "authentication-controller"
+        ],
+        "operationId": "confirm",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/devices/{deviceId}/turn-on": {
+      "post": {
+        "tags": [
+          "device-controller"
+        ],
+        "operationId": "turnOnDevice",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "defaultMode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceTurnOnRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceTurnOnResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/devices/{deviceId}/turn-off": {
+      "post": {
+        "tags": [
+          "device-controller"
+        ],
+        "operationId": "turnOffDevice",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceTurnOffRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceTurnOffResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/devices/{deviceId}/low-battery": {
+      "post": {
+        "tags": [
+          "device-controller"
+        ],
+        "operationId": "lowBatteryMode",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "lowMode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceBatteryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/air-quality-sensor": {
+      "get": {
+        "tags": [
+          "air-quality-sensor-controller"
+        ],
+        "operationId": "findAllAirQualitySensors",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseAirQualitySensorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "air-quality-sensor-controller"
+        ],
+        "operationId": "addNewAirQualitySensor",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AirQualitySensorRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AirQualitySensorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/air-quality-sensor/{sensorId}/air-data": {
+      "get": {
+        "tags": [
+          "air-quality-sensor-controller"
+        ],
+        "operationId": "getAllAirData",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AirQualitySensorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "air-quality-sensor-controller"
+        ],
+        "operationId": "sendAirData",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AirQualitySensorDataRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AirQualitySensorDataResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/weatherSensor/{id}": {
+      "get": {
+        "tags": [
+          "weather-sensor-controller"
+        ],
+        "operationId": "findSensorById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeatherSensorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "weather-sensor-controller"
+        ],
+        "operationId": "removeSensor",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/thermostat/{thermostatId}": {
+      "get": {
+        "tags": [
+          "thermostat-controller"
+        ],
+        "operationId": "findThermostatById",
+        "parameters": [
+          {
+            "name": "thermostatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThermostatResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "thermostat-controller"
+        ],
+        "operationId": "removeThermostat",
+        "parameters": [
+          {
+            "name": "thermostatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/smoke-sensor/{smokeSensorId}": {
+      "get": {
+        "tags": [
+          "smoke-sensor-controller"
+        ],
+        "operationId": "findSensorById_1",
+        "parameters": [
+          {
+            "name": "smokeSensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmokeSensorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "smoke-sensor-controller"
+        ],
+        "operationId": "removeSmokeSensor",
+        "parameters": [
+          {
+            "name": "smokeSensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/smoke-sensor/{smokeSensorId}/self-test": {
+      "get": {
+        "tags": [
+          "smoke-sensor-controller"
+        ],
+        "operationId": "selfTestPassed",
+        "parameters": [
+          {
+            "name": "smokeSensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/outlet/{outletId}": {
+      "get": {
+        "tags": [
+          "smart-outlet-controller"
+        ],
+        "operationId": "findOutletById",
+        "parameters": [
+          {
+            "name": "outletId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmartOutletResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "smart-outlet-controller"
+        ],
+        "operationId": "deleteSmartOutlet",
+        "parameters": [
+          {
+            "name": "outletId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/outlet/{outletId}/last-activity": {
+      "get": {
+        "tags": [
+          "smart-outlet-controller"
+        ],
+        "operationId": "getLastActivity",
+        "parameters": [
+          {
+            "name": "outletId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmartOutletLastActivityResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lightSwitch/{switchId}": {
+      "get": {
+        "tags": [
+          "light-switch-controller"
+        ],
+        "operationId": "getSwitchById",
+        "parameters": [
+          {
+            "name": "switchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LightSwitchResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "light-switch-controller"
+        ],
+        "operationId": "deleteLightSwitch",
+        "parameters": [
+          {
+            "name": "switchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/doorLock/{lockId}": {
+      "get": {
+        "tags": [
+          "door-lock-controller"
+        ],
+        "operationId": "getLockById",
+        "parameters": [
+          {
+            "name": "lockId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoorLockResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/check-business-owner/{userId}": {
+      "get": {
+        "tags": [
+          "authentication-controller"
+        ],
+        "operationId": "checkBusinessOwner",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/devices": {
+      "get": {
+        "tags": [
+          "device-controller"
+        ],
+        "operationId": "getAllDevices",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseDeviceResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/devices/{id}": {
+      "get": {
+        "tags": [
+          "device-controller"
+        ],
+        "operationId": "getDeviceById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/devices/{deviceId}/energy": {
+      "get": {
+        "tags": [
+          "device-controller"
+        ],
+        "operationId": "getEnergyConsuming",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceTechnicalResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/devices/{deviceId}/battery": {
+      "get": {
+        "tags": [
+          "device-controller"
+        ],
+        "operationId": "getBatteryLevel",
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceBatteryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/devices/user/{id}": {
+      "get": {
+        "tags": [
+          "device-controller"
+        ],
+        "operationId": "findDeviceById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/air-quality-sensor/{sensorId}": {
+      "get": {
+        "tags": [
+          "air-quality-sensor-controller"
+        ],
+        "operationId": "findAirQualitySensorById",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AirQualitySensorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "air-quality-sensor-controller"
+        ],
+        "operationId": "removeAirQualitySensor",
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/doorLock/{doorLockId}": {
+      "delete": {
+        "tags": [
+          "door-lock-controller"
+        ],
+        "operationId": "deleteDoorLock",
+        "parameters": [
+          {
+            "name": "doorLockId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "WeatherSensorEnergyRequest": {
+        "type": "object",
+        "properties": {
+          "voltage": {
+            "type": "number",
+            "format": "double"
+          },
+          "amps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "energyConsumingPerHours": {
+            "type": "string"
+          }
+        }
+      },
+      "WeatherSensorEnergyResponse": {
+        "type": "object",
+        "properties": {
+          "sensorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "voltage": {
+            "type": "number",
+            "format": "double"
+          },
+          "amps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "energyConsumingPerHours": {
+            "type": "string"
+          },
+          "ownerId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ColorTemperatureRequest": {
+        "type": "object",
+        "properties": {
+          "colorTemperature": {
+            "type": "string",
+            "enum": [
+              "WARM",
+              "NEUTRAL",
+              "COOL"
+            ]
+          }
+        }
+      },
+      "ColorTemperatureResponse": {
+        "type": "object",
+        "properties": {
+          "lightSwitchId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "colorTemperature": {
+            "type": "string",
+            "enum": [
+              "WARM",
+              "NEUTRAL",
+              "COOL"
+            ]
+          },
+          "ownerId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "BrightnessRequest": {
+        "type": "object",
+        "properties": {
+          "brightness": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "colorTemperature": {
+            "type": "string",
+            "enum": [
+              "WARM",
+              "NEUTRAL",
+              "COOL"
+            ]
+          }
+        }
+      },
+      "BrightnessResponse": {
+        "type": "object",
+        "properties": {
+          "switchId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "brightness": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "colorTemperature": {
+            "type": "string",
+            "enum": [
+              "WARM",
+              "NEUTRAL",
+              "COOL"
+            ]
+          },
+          "ownerId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ChangeDoorLockRequest": {
+        "required": [
+          "doorCode"
+        ],
+        "type": "object",
+        "properties": {
+          "doorCode": {
+            "maximum": 999999,
+            "minimum": 1000,
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "DeviceRequest": {
+        "required": [
+          "deviceDescription",
+          "deviceModel",
+          "deviceName",
+          "deviceType",
+          "manufacturer",
+          "serialNumber"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deviceName": {
+            "type": "string"
+          },
+          "deviceType": {
+            "type": "string",
+            "enum": [
+              "THERMOSTAT",
+              "LOCK",
+              "CAMERA",
+              "SPEAKER",
+              "CHARGER",
+              "REMOTE_CONTROLLER",
+              "MULTI_MEDIA",
+              "SENSOR",
+              "SWITCH",
+              "OUTLET",
+              "LIGHT"
+            ]
+          },
+          "deviceDescription": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "deviceModel": {
+            "type": "string"
+          },
+          "serialNumber": {
+            "type": "string"
+          }
+        }
+      },
+      "WeatherSensorRequest": {
+        "type": "object",
+        "properties": {
+          "deviceName": {
+            "type": "string"
+          },
+          "deviceType": {
+            "type": "string",
+            "enum": [
+              "THERMOSTAT",
+              "LOCK",
+              "CAMERA",
+              "SPEAKER",
+              "CHARGER",
+              "REMOTE_CONTROLLER",
+              "MULTI_MEDIA",
+              "SENSOR",
+              "SWITCH",
+              "OUTLET",
+              "LIGHT"
+            ]
+          },
+          "deviceDescription": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "deviceModel": {
+            "type": "string"
+          },
+          "serialNumber": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "MAINTENANCE",
+              "DISCONNECTED",
+              "SCHEDULED"
+            ]
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "WeatherSensorResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deviceName": {
+            "type": "string"
+          },
+          "deviceType": {
+            "type": "string",
+            "enum": [
+              "THERMOSTAT",
+              "LOCK",
+              "CAMERA",
+              "SPEAKER",
+              "CHARGER",
+              "REMOTE_CONTROLLER",
+              "MULTI_MEDIA",
+              "SENSOR",
+              "SWITCH",
+              "OUTLET",
+              "LIGHT"
+            ]
+          },
+          "deviceDescription": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "deviceModel": {
+            "type": "string"
+          },
+          "voltage": {
+            "type": "number",
+            "format": "double"
+          },
+          "amps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "energyConsumingPerHours": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "MAINTENANCE",
+              "DISCONNECTED",
+              "SCHEDULED"
+            ]
+          },
+          "ownerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "connected": {
+            "type": "boolean"
+          }
+        }
+      },
+      "WeatherDataRequest": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "longitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "temperature": {
+            "type": "number",
+            "format": "double"
+          },
+          "humidity": {
+            "type": "number",
+            "format": "double"
+          },
+          "pressure": {
+            "type": "number",
+            "format": "double"
+          },
+          "windSpeed": {
+            "type": "number",
+            "format": "double"
+          },
+          "windDirection": {
+            "type": "string"
+          },
+          "precipitation": {
+            "type": "number",
+            "format": "double"
+          },
+          "lastUpdateTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "WeatherDataResponse": {
+        "type": "object",
+        "properties": {
+          "sensorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "longitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "temperature": {
+            "type": "number",
+            "format": "double"
+          },
+          "humidity": {
+            "type": "number",
+            "format": "double"
+          },
+          "pressure": {
+            "type": "number",
+            "format": "double"
+          },
+          "windSpeed": {
+            "type": "number",
+            "format": "double"
+          },
+          "windDirection": {
+            "type": "string"
+          },
+          "precipitation": {
+            "type": "number",
+            "format": "double"
+          },
+          "lastUpdateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ownerId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ThermostatRequest": {
+        "required": [
+          "deviceModel",
+          "deviceName",
+          "deviceType",
+          "location",
+          "manufacturer",
+          "ownerId",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "deviceName": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "deviceType": {
+            "type": "string",
+            "enum": [
+              "THERMOSTAT",
+              "LOCK",
+              "CAMERA",
+              "SPEAKER",
+              "CHARGER",
+              "REMOTE_CONTROLLER",
+              "MULTI_MEDIA",
+              "SENSOR",
+              "SWITCH",
+              "OUTLET",
+              "LIGHT"
+            ]
+          },
+          "deviceDescription": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string"
+          },
+          "manufacturer": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "deviceModel": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "MAINTENANCE",
+              "DISCONNECTED",
+              "SCHEDULED"
+            ]
+          },
+          "location": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "voltage": {
+            "maximum": 240,
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          },
+          "amps": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "energyConsumingPerHours": {
+            "pattern": "^\\d+(\\.\\d+)?\\s*(kWh|Wh)$",
+            "type": "string"
+          },
+          "ownerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "connected": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ThermostatResponse": {
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deviceName": {
+            "type": "string"
+          },
+          "deviceType": {
+            "type": "string",
+            "enum": [
+              "THERMOSTAT",
+              "LOCK",
+              "CAMERA",
+              "SPEAKER",
+              "CHARGER",
+              "REMOTE_CONTROLLER",
+              "MULTI_MEDIA",
+              "SENSOR",
+              "SWITCH",
+              "OUTLET",
+              "LIGHT"
+            ]
+          },
+          "deviceDescription": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "deviceModel": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "MAINTENANCE",
+              "DISCONNECTED",
+              "SCHEDULED"
+            ]
+          },
+          "location": {
+            "type": "string"
+          },
+          "voltage": {
+            "type": "number",
+            "format": "double"
+          },
+          "amps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "energyConsumingPerHours": {
+            "type": "string"
+          },
+          "ownerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "connected": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ThermostatHeatModeRequest": {
+        "required": [
+          "currentTemperature",
+          "targetTemperature",
+          "temperatureMode"
+        ],
+        "type": "object",
+        "properties": {
+          "currentTemperature": {
+            "maximum": 80.0,
+            "exclusiveMaximum": false,
+            "type": "number",
+            "format": "double"
+          },
+          "targetTemperature": {
+            "maximum": 80.0,
+            "exclusiveMaximum": false,
+            "minimum": 50.0,
+            "exclusiveMinimum": false,
+            "type": "number",
+            "format": "double"
+          },
+          "temporaryMode": {
+            "type": "boolean"
+          },
+          "autoMode": {
+            "type": "boolean"
+          },
+          "temperatureMode": {
+            "type": "string",
+            "enum": [
+              "HEAT",
+              "Cool",
+              "Auto",
+              "Off"
+            ]
+          }
+        }
+      },
+      "ThermostatHeatModeResponse": {
+        "type": "object",
+        "properties": {
+          "thermostatId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "temporaryMode": {
+            "type": "boolean"
+          },
+          "autoMode": {
+            "type": "boolean"
+          },
+          "currentTemperature": {
+            "type": "number",
+            "format": "double"
+          },
+          "targetTemperature": {
+            "type": "number",
+            "format": "double"
+          },
+          "temperatureMode": {
+            "type": "string",
+            "enum": [
+              "HEAT",
+              "Cool",
+              "Auto",
+              "Off"
+            ]
+          },
+          "ownerId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ThermostatCoolingModeRequest": {
+        "required": [
+          "currentTemperature",
+          "targetTemperature",
+          "temperatureMode"
+        ],
+        "type": "object",
+        "properties": {
+          "currentTemperature": {
+            "maximum": 100.0,
+            "exclusiveMaximum": false,
+            "minimum": 68.0,
+            "exclusiveMinimum": false,
+            "type": "number",
+            "format": "double"
+          },
+          "targetTemperature": {
+            "maximum": 100.0,
+            "exclusiveMaximum": false,
+            "minimum": 69.0,
+            "exclusiveMinimum": false,
+            "type": "number",
+            "format": "double"
+          },
+          "temporaryMode": {
+            "type": "boolean"
+          },
+          "autoMode": {
+            "type": "boolean"
+          },
+          "temperatureMode": {
+            "type": "string",
+            "enum": [
+              "HEAT",
+              "Cool",
+              "Auto",
+              "Off"
+            ]
+          }
+        }
+      },
+      "ThermostatCoolingModeResponse": {
+        "type": "object",
+        "properties": {
+          "temporaryMode": {
+            "type": "boolean"
+          },
+          "autoMode": {
+            "type": "boolean"
+          },
+          "thermostatId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currentTemperature": {
+            "type": "number",
+            "format": "double"
+          },
+          "targetTemperature": {
+            "type": "number",
+            "format": "double"
+          },
+          "temperatureMode": {
+            "type": "string",
+            "enum": [
+              "HEAT",
+              "Cool",
+              "Auto",
+              "Off"
+            ]
+          },
+          "ownerId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "SmokeSensorRequest": {
+        "type": "object",
+        "properties": {
+          "deviceName": {
+            "type": "string"
+          },
+          "deviceDescription": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "deviceModel": {
+            "type": "string"
+          },
+          "serialNumber": {
+            "type": "string"
+          }
+        }
+      },
+      "SmokeSensorResponse": {
+        "type": "object",
+        "properties": {
+          "smokeSensorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deviceName": {
+            "type": "string"
+          },
+          "deviceDescription": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "deviceModel": {
+            "type": "string"
+          },
+          "serialNumber": {
+            "type": "string"
+          }
+        }
+      },
+      "SmokeSensorTurnOnResponse": {
+        "type": "object",
+        "properties": {
+          "smokeSensorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "turnOn": {
+            "type": "boolean"
+          },
+          "turnOff": {
+            "type": "boolean"
+          },
+          "connected": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SmokeSensorTurnOffResponse": {
+        "type": "object",
+        "properties": {
+          "smokeSensorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "turnOn": {
+            "type": "boolean"
+          },
+          "turnOff": {
+            "type": "boolean"
+          },
+          "connected": {
+            "type": "boolean"
+          }
+        }
+      },
+      "AlarmSensitivityRequest": {
+        "type": "object",
+        "properties": {
+          "valueForSensitivity": {
+            "maximum": 1.0,
+            "exclusiveMaximum": false,
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number",
+            "format": "double"
+          },
+          "sensitivity": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ]
+          }
+        }
+      },
+      "AlarmSensitivityResponse": {
+        "type": "object",
+        "properties": {
+          "smokeSensorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "valueForSensitivity": {
+            "type": "number",
+            "format": "double"
+          },
+          "sensitivity": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ]
+          }
+        }
+      },
+      "AlarmMaintenanceDateResponse": {
+        "type": "object",
+        "properties": {
+          "smokeSensorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastMaintenanceDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "SmokeSensorLowEnergyConsumingModeResponse": {
+        "type": "object",
+        "properties": {
+          "smokeSensorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "voltage": {
+            "type": "number",
+            "format": "double"
+          },
+          "amps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "energyConsumingPerHours": {
+            "type": "string"
+          }
+        }
+      },
+      "SmokeSensorDefaultEnergyConsumingModeResponse": {
+        "type": "object",
+        "properties": {
+          "smokeSensorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "voltage": {
+            "type": "number",
+            "format": "double"
+          },
+          "amps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "energyConsumingPerHours": {
+            "type": "string"
+          }
+        }
+      },
+      "AlarmRequest": {
+        "required": [
+          "smokeLevel",
+          "smokeThreshold"
+        ],
+        "type": "object",
+        "properties": {
+          "smokeLevel": {
+            "type": "number",
+            "format": "double"
+          },
+          "smokeThreshold": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "AlarmResponse": {
+        "type": "object",
+        "properties": {
+          "alarmId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "alarmName": {
+            "type": "string"
+          },
+          "alarmThreshold": {
+            "type": "number",
+            "format": "double"
+          },
+          "lastAlarmTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "alarmActive": {
+            "type": "boolean"
+          },
+          "smokeValue": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "SmartOutletRequest": {
+        "type": "object",
+        "properties": {
+          "deviceName": {
+            "type": "string"
+          },
+          "deviceType": {
+            "type": "string",
+            "enum": [
+              "THERMOSTAT",
+              "LOCK",
+              "CAMERA",
+              "SPEAKER",
+              "CHARGER",
+              "REMOTE_CONTROLLER",
+              "MULTI_MEDIA",
+              "SENSOR",
+              "SWITCH",
+              "OUTLET",
+              "LIGHT"
+            ]
+          },
+          "deviceDescription": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "deviceModel": {
+            "type": "string"
+          },
+          "serialNumber": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "MAINTENANCE",
+              "DISCONNECTED",
+              "SCHEDULED"
+            ]
+          },
+          "voltage": {
+            "type": "number",
+            "format": "double"
+          },
+          "amps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "energyConsumingPerHours": {
+            "type": "string"
+          }
+        }
+      },
+      "SmartOutletResponse": {
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deviceName": {
+            "type": "string"
+          },
+          "deviceType": {
+            "type": "string",
+            "enum": [
+              "THERMOSTAT",
+              "LOCK",
+              "CAMERA",
+              "SPEAKER",
+              "CHARGER",
+              "REMOTE_CONTROLLER",
+              "MULTI_MEDIA",
+              "SENSOR",
+              "SWITCH",
+              "OUTLET",
+              "LIGHT"
+            ]
+          },
+          "deviceDescription": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "deviceModel": {
+            "type": "string"
+          },
+          "serialNumber": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "MAINTENANCE",
+              "DISCONNECTED",
+              "SCHEDULED"
+            ]
+          },
+          "voltage": {
+            "type": "number",
+            "format": "double"
+          },
+          "amps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "energyConsumingPerHours": {
+            "type": "string"
+          },
+          "ownerId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "SmartOutletTurnOnResponse": {
+        "type": "object",
+        "properties": {
+          "outletId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastOnTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "on": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SmartOutletTurnOffResponse": {
+        "type": "object",
+        "properties": {
+          "outletId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastOffTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "on": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ScheduleRequestOn": {
+        "type": "object",
+        "properties": {
+          "scheduledTimeOn": {
+            "type": "string"
+          }
+        }
+      },
+      "SmartOutletScheduleResponse": {
+        "type": "object",
+        "properties": {
+          "outletId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "scheduledOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "scheduledOff": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ScheduleRequestOff": {
+        "type": "object",
+        "properties": {
+          "scheduledTimeOff": {
+            "type": "string"
+          }
+        }
+      },
+      "SmartOutletEnergyConsumingResponse": {
+        "type": "object",
+        "properties": {
+          "outletId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "voltage": {
+            "type": "number",
+            "format": "double"
+          },
+          "amps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "energyConsumingPerHours": {
+            "type": "string"
+          },
+          "ownerId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "SmartOutletEnergyConsumingRequest": {
+        "type": "object",
+        "properties": {
+          "voltage": {
+            "type": "number",
+            "format": "double"
+          },
+          "amps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "energyConsumingPerHours": {
+            "type": "string"
+          }
+        }
+      },
+      "LightSwitchRequest": {
+        "type": "object",
+        "properties": {
+          "deviceName": {
+            "type": "string"
+          },
+          "deviceType": {
+            "type": "string",
+            "enum": [
+              "THERMOSTAT",
+              "LOCK",
+              "CAMERA",
+              "SPEAKER",
+              "CHARGER",
+              "REMOTE_CONTROLLER",
+              "MULTI_MEDIA",
+              "SENSOR",
+              "SWITCH",
+              "OUTLET",
+              "LIGHT"
+            ]
+          },
+          "deviceDescription": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "deviceModel": {
+            "type": "string"
+          },
+          "serialNumber": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "MAINTENANCE",
+              "DISCONNECTED",
+              "SCHEDULED"
+            ]
+          },
+          "location": {
+            "type": "string"
+          },
+          "batteryLevel": {
+            "type": "number",
+            "format": "double"
+          },
+          "voltage": {
+            "type": "number",
+            "format": "double"
+          },
+          "amps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "energyConsumingPerHours": {
+            "type": "string"
+          },
+          "connected": {
+            "type": "boolean"
+          }
+        }
+      },
+      "LightSwitchResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deviceName": {
+            "type": "string"
+          },
+          "deviceType": {
+            "type": "string",
+            "enum": [
+              "THERMOSTAT",
+              "LOCK",
+              "CAMERA",
+              "SPEAKER",
+              "CHARGER",
+              "REMOTE_CONTROLLER",
+              "MULTI_MEDIA",
+              "SENSOR",
+              "SWITCH",
+              "OUTLET",
+              "LIGHT"
+            ]
+          },
+          "deviceDescription": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "deviceModel": {
+            "type": "string"
+          },
+          "serialNumber": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "MAINTENANCE",
+              "DISCONNECTED",
+              "SCHEDULED"
+            ]
+          },
+          "location": {
+            "type": "string"
+          },
+          "batteryLevel": {
+            "type": "number",
+            "format": "double"
+          },
+          "voltage": {
+            "type": "number",
+            "format": "double"
+          },
+          "amps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "energyConsumingPerHours": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ownerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "connected": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SwitchTurnOnResponse": {
+        "type": "object",
+        "properties": {
+          "switchId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isOn": {
+            "type": "boolean"
+          },
+          "brightness": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "colorTemperature": {
+            "type": "string",
+            "enum": [
+              "WARM",
+              "NEUTRAL",
+              "COOL"
+            ]
+          },
+          "maxWattage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minWattage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ownerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "DEFAULT_MODE",
+              "LOW_MODE",
+              "HIGH_MODE"
+            ]
+          }
+        }
+      },
+      "SwitchTurnOffResponse": {
+        "type": "object",
+        "properties": {
+          "switchId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ownerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "on": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SwitchTurnOnRequest": {
+        "type": "object",
+        "properties": {
+          "brightness": {
+            "maximum": 100,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "colorTemperature": {
+            "type": "string",
+            "enum": [
+              "WARM",
+              "NEUTRAL",
+              "COOL"
+            ]
+          },
+          "maxWattage": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "minWattage": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "DEFAULT_MODE",
+              "LOW_MODE",
+              "HIGH_MODE"
+            ]
+          }
+        }
+      },
+      "DoorLockRequest": {
+        "type": "object",
+        "properties": {
+          "deviceName": {
+            "type": "string"
+          },
+          "deviceType": {
+            "type": "string",
+            "enum": [
+              "THERMOSTAT",
+              "LOCK",
+              "CAMERA",
+              "SPEAKER",
+              "CHARGER",
+              "REMOTE_CONTROLLER",
+              "MULTI_MEDIA",
+              "SENSOR",
+              "SWITCH",
+              "OUTLET",
+              "LIGHT"
+            ]
+          },
+          "deviceDescription": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "deviceModel": {
+            "type": "string"
+          },
+          "serialNumber": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "MAINTENANCE",
+              "DISCONNECTED",
+              "SCHEDULED"
+            ]
+          },
+          "accessCode": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "DoorLockResponse": {
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deviceName": {
+            "type": "string"
+          },
+          "deviceType": {
+            "type": "string",
+            "enum": [
+              "THERMOSTAT",
+              "LOCK",
+              "CAMERA",
+              "SPEAKER",
+              "CHARGER",
+              "REMOTE_CONTROLLER",
+              "MULTI_MEDIA",
+              "SENSOR",
+              "SWITCH",
+              "OUTLET",
+              "LIGHT"
+            ]
+          },
+          "deviceDescription": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "deviceModel": {
+            "type": "string"
+          },
+          "serialNumber": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "MAINTENANCE",
+              "DISCONNECTED",
+              "SCHEDULED"
+            ]
+          },
+          "lockStatus": {
+            "type": "string",
+            "enum": [
+              "LOCKED",
+              "UNLOCKED",
+              "JAMMED"
+            ]
+          },
+          "lockMechanism": {
+            "type": "string",
+            "enum": [
+              "PIN_COD",
+              "FINGER_PRINT",
+              "BOTH"
+            ]
+          },
+          "ownerId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "DoorLockAccessCodeRequest": {
+        "type": "object",
+        "properties": {
+          "accessCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fingerPrintCode": {
+            "type": "string"
+          }
+        }
+      },
+      "DoorLockStatus": {
+        "type": "object",
+        "properties": {
+          "doorLockId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastOpenedTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "opened": {
+            "type": "boolean"
+          }
+        }
+      },
+      "RegistrationRequest": {
+        "required": [
+          "email",
+          "firstname",
+          "lastname",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "maxLength": 2147483647,
+            "minLength": 8,
+            "type": "string"
+          }
+        }
+      },
+      "RegistrationBusinessAccountRequest": {
+        "required": [
+          "businessType",
+          "email",
+          "firstname",
+          "lastname",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "maxLength": 2147483647,
+            "minLength": 8,
+            "type": "string"
+          },
+          "businessType": {
+            "maxLength": 2147483647,
+            "minLength": 2,
+            "type": "string"
+          }
+        }
+      },
+      "AuthenticationRequest": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "maxLength": 2147483647,
+            "minLength": 8,
+            "type": "string"
+          }
+        }
+      },
+      "AuthenticationResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "DeviceTurnOnRequest": {
+        "type": "object",
+        "properties": {
+          "turnOn": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DeviceTurnOnResponse": {
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "turnOn": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DeviceTurnOffRequest": {
+        "type": "object",
+        "properties": {
+          "turnOff": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DeviceTurnOffResponse": {
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "turnOff": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DeviceBatteryResponse": {
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "batteryPercentage": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "AirQualitySensorRequest": {
+        "type": "object",
+        "properties": {
+          "deviceName": {
+            "type": "string"
+          },
+          "deviceDescription": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "deviceModel": {
+            "type": "string"
+          },
+          "serialNumber": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "pm25AlertThreshold": {
+            "type": "number",
+            "format": "double"
+          },
+          "co2AlertThreshold": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "accuracy": {
+            "type": "number",
+            "format": "double"
+          },
+          "updateFrequency": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "AirQualitySensorResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deviceName": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "turnOn": {
+            "type": "boolean"
+          },
+          "pm25Level": {
+            "type": "number",
+            "format": "double"
+          },
+          "pm10Level": {
+            "type": "number",
+            "format": "double"
+          },
+          "co2Level": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "coLevel": {
+            "type": "number",
+            "format": "double"
+          },
+          "no2Level": {
+            "type": "number",
+            "format": "double"
+          },
+          "o3Level": {
+            "type": "number",
+            "format": "double"
+          },
+          "vocLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "temperature": {
+            "type": "number",
+            "format": "double"
+          },
+          "humidity": {
+            "type": "number",
+            "format": "double"
+          },
+          "pressure": {
+            "type": "number",
+            "format": "double"
+          },
+          "airQualityIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "updateFrequency": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pm25AlertThreshold": {
+            "type": "number",
+            "format": "double"
+          },
+          "co2AlertThreshold": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasWifiModule": {
+            "type": "boolean"
+          },
+          "accuracy": {
+            "type": "number",
+            "format": "double"
+          },
+          "lastCalibrationDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AirQualitySensorDataRequest": {
+        "required": [
+          "airQualityIndex",
+          "co2AlertThreshold",
+          "co2Level",
+          "coLevel",
+          "humidity",
+          "no2Level",
+          "o3Level",
+          "pm10Level",
+          "pm25AlertThreshold",
+          "pm25Level",
+          "pressure",
+          "temperature",
+          "updateFrequency",
+          "vocLevel"
+        ],
+        "type": "object",
+        "properties": {
+          "pm25Level": {
+            "type": "number",
+            "format": "double"
+          },
+          "pm10Level": {
+            "type": "number",
+            "format": "double"
+          },
+          "co2Level": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "coLevel": {
+            "type": "number",
+            "format": "double"
+          },
+          "no2Level": {
+            "type": "number",
+            "format": "double"
+          },
+          "o3Level": {
+            "type": "number",
+            "format": "double"
+          },
+          "vocLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "temperature": {
+            "minimum": -273.15,
+            "exclusiveMinimum": false,
+            "type": "number",
+            "format": "double"
+          },
+          "humidity": {
+            "maximum": 100.0,
+            "exclusiveMaximum": false,
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number",
+            "format": "double"
+          },
+          "pressure": {
+            "type": "number",
+            "format": "double"
+          },
+          "airQualityIndex": {
+            "maximum": 500,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "updateFrequency": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pm25AlertThreshold": {
+            "type": "number",
+            "format": "double"
+          },
+          "co2AlertThreshold": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "AirQualitySensorDataResponse": {
+        "type": "object",
+        "properties": {
+          "sensorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pm25Level": {
+            "type": "number",
+            "format": "double"
+          },
+          "pm10Level": {
+            "type": "number",
+            "format": "double"
+          },
+          "co2Level": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "coLevel": {
+            "type": "number",
+            "format": "double"
+          },
+          "no2Level": {
+            "type": "number",
+            "format": "double"
+          },
+          "o3Level": {
+            "type": "number",
+            "format": "double"
+          },
+          "vocLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "temperature": {
+            "type": "number",
+            "format": "double"
+          },
+          "humidity": {
+            "type": "number",
+            "format": "double"
+          },
+          "pressure": {
+            "type": "number",
+            "format": "double"
+          },
+          "airQualityIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "updateFrequency": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pm25AlertThreshold": {
+            "type": "number",
+            "format": "double"
+          },
+          "co2AlertThreshold": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "PageResponseWeatherSensorResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WeatherSensorResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElement": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageResponseThermostatResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ThermostatResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElement": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageResponseSmokeSensorResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SmokeSensorResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElement": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageResponseSmartOutletResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SmartOutletResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElement": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SmartOutletLastActivityResponse": {
+        "type": "object",
+        "properties": {
+          "outletId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastOnTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastOffTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "currentlyOn": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageResponseLightSwitchResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LightSwitchResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElement": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageResponseDoorLockResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DoorLockResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElement": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DeviceResponse": {
+        "type": "object"
+      },
+      "PageResponseDeviceResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeviceResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElement": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DeviceTechnicalResponse": {
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "batteryLevel": {
+            "type": "number",
+            "format": "double"
+          },
+          "voltage": {
+            "type": "number",
+            "format": "double"
+          },
+          "amps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "energyConsumingPerHours": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageResponseAirQualitySensorResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AirQualitySensorResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElement": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "description": "JWT auth description",
+        "in": "header",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
