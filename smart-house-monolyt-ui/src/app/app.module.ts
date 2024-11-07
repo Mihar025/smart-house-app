@@ -11,6 +11,10 @@ import { RegisterComponent } from "./pages/register/register.component";
 import { HttpTokenInterceptor } from "./services/interceptor/http-token.interceptor";
 import { JWT_OPTIONS, JwtHelperService } from "@auth0/angular-jwt";
 import { ActivateAccComponent } from "./pages/activate-acc/activate-acc.component";
+import {MenuComponent} from "./modules/main-page/components/menu/menu.component";
+import {MainPageComponent} from "./modules/main-page/pages/main-page/main-page.component";
+import {RouterModule} from "@angular/router";
+import {routes} from "./app.routes";
 
 @NgModule({
   declarations: [
@@ -18,6 +22,8 @@ import { ActivateAccComponent } from "./pages/activate-acc/activate-acc.componen
     LoginComponent,
     RegisterComponent,
     ActivateAccComponent,
+    MenuComponent,
+    MainPageComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +31,7 @@ import { ActivateAccComponent } from "./pages/activate-acc/activate-acc.componen
     HttpClientModule,
     FormsModule,
     CommonModule,
-    CodeInputModule,
+    CodeInputModule
   ],
   providers: [
     provideHttpClient(withFetch()),
@@ -34,8 +40,11 @@ import { ActivateAccComponent } from "./pages/activate-acc/activate-acc.componen
       useClass: HttpTokenInterceptor,
       multi: true
     },
-    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    {provide: JWT_OPTIONS, useValue: JWT_OPTIONS},
     JwtHelperService
+  ],
+  exports: [
+    MenuComponent
   ],
   bootstrap: [AppComponent]
 })
